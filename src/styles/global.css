@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'GeistSans';
+    src: url(/fonts/Geist-Light.woff2);
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GeistSans';
+    src: url(/fonts/Geist-Medium.woff2);
+    font-weight: 500;
+    font-style: normal;
+}
+
+* {
+  font-family: 'GeistSans', sans-serif;
+}
+
+body {
+    background: #ffffff;
+}

@@ -1,0 +1,24 @@
+---
+import CartButton from "@/components/cart-button"
+---
+<header>
+    <nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 ">
+        <a href="/" aria-label="Ir al inicio" class="text-xl font-light tracking-widest">SNEAKERSCHILE</a>
+        <div class="flex items-center space-x-8">
+            <ul class="hidden md:flex space-x-8 text-sm" role="menubar" aria-label="Categorías de productos">
+                <li role="none" class="font-medium text-gray-500 cursor-pointer hover:text-black transition-colors">TODO</li>
+                <li role="none" class="font-medium text-gray-500 cursor-pointer hover:text-black transition-colors">ZAPATILLAS</li>
+                <li role="none" class="font-medium text-gray-500 cursor-pointer hover:text-black transition-colors">BUZOS</li>
+            </ul>
+            <div class="relative cursor-default" aria-label="Carrito de compras" role="button" aria-haspopup="true" aria-expanded="false">
+                <CartButton client:load/>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<section class="md:hidden flex justify-center space-x-6 pt-20 pb-4 text-sm" role="menubar" aria-label="Categorías de productos">
+    <button class="font-medium text-gray-500 hover:text-black transition-colors">TODO</button>
+    <button class="font-medium text-gray-500 hover:text-black transition-colors">ZAPATILLAS</button>
+    <button class="font-medium text-gray-500 hover:text-black transition-colors">BUZOS</button>
+</section>
