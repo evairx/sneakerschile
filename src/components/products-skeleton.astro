@@ -1,0 +1,13 @@
+<div class="container px-2 mx-auto pt-10 md:px-[0rem] md:pt-32 pb-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+      {Array.from({ length: 4 }, (_, i) => (
+        <div class="group">
+          <div class="relative overflow-hidden mb-4">
+            <div class="w-full aspect-square bg-gray-200 animate-pulse" />
+          </div>
+          <div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse mb-2"></div>
+          <div class="h-4 bg-gray-300 rounded w-1/4 animate-pulse"></div>
+        </div>
+      ))}
+    </div>
+  </div>

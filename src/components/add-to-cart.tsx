@@ -3,15 +3,15 @@ import { useStore } from "@nanostores/preact"
 import { signal } from "@preact/signals"
 import { useWindowSize } from "@/hook/use-window-size"
 
-interface Size {
-    value: string;
+interface Values {
+    size: string;
     stock: number;
 }
 
 const selectedSizes = signal<Record<number, string>>({})
 const openSelected = signal<Record<number, boolean>>({})
 
-export default function AddToCart({ sizes, id }: { sizes: Size[]; id: number }) {
+export default function AddToCart({ values, id }: { values: Values[]; id: number }) {
     const cartStore = useStore(cart)
     const windowSize = useWindowSize()
 
@@ -56,23 +56,23 @@ export default function AddToCart({ sizes, id }: { sizes: Size[]; id: number }) 
                 <h3 className="text-sm font-medium mb-3">Seleccionar Talla</h3>
                 <div className="flex justify-center align-center w-full">
                     <div className="grid grid-cols-3 gap-2 w-full max-w-[200px]">
-                        {sizes.map((size) => (
+                        {values.map((size) => (
                             <button
-                                key={size.value}
+                                key={size.size}
                                 onClick={() => {
                                     if (size.stock > 0) {
-                                        selectedSizes.value = { ...selectedSizes.value, [id]: size.value }
+                                        selectedSizes.value = { ...selectedSizes.value, [id]: size.size }
                                     }
                                 }}
                                 className={`py-2 px-3 text-xs border ${ size.stock === 0
                                     ? "border-[#4444443a] text-[#4444443a] cursor-not-allowed"
-                                    : selectedSizes.value[id] === size.value
+                                    : selectedSizes.value[id] === size.size
                                     ? "border-black bg-black text-white"
                                     : "border-gray-300 hover:border-black"
                                     }
                                 `}
                             >
-                                {size.value}
+                                {size.size}
                             </button>
                         ))}
                     </div>

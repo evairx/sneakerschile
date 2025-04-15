@@ -23,3 +23,36 @@
 body {
     background: #ffffff;
 }
+
+select {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: white;
+    color: black;
+    font-family: inherit;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background:rgb(0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #5f5f5f;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #5f5f5f;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}

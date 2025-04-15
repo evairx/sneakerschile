@@ -1,0 +1,186 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import MenuCheckout from '@/components/menu/menu-checkout.astro';
+import InfoCart from '@/components/checkout/info-cart.astro'
+import Region from "@/components/checkout/region.astro"
+import SelectShipping from "@/components/checkout/select-shipping";
+import Address from '@/components/checkout/address';
+import SelectPayment from "@/components/checkout/select-payment";
+import { nanoid } from 'nanoid';
+
+console.log(nanoid())
+---
+<Layout title="Finaliza tu compra">
+    <div class="flex flex-col min-h-screen bg-white">
+        <MenuCheckout />
+        <div class="flex-grow container mx-auto px-4 pt-24 pb-20 max-w-6xl">
+            <a href="/" class="inline-flex items-center text-sm font-medium mb-8 hover:underline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+                Seguir comprando
+            </a>
+            <h1 class="text-2xl font-light mb-8">Finalizar compra</h1>
+
+            <div class="grid md:grid-cols-5 gap-12">
+                <InfoCart />
+                <div class="md:col-span-3 space-y-8">
+                    <div class="space-y-4">
+                        <h2 class="text-lg font-light">Información de envío</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm mb-1">
+                                    Nombre
+                                </label>
+                                <input
+                                    type="text"
+                                    id="firstName"
+                                    class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-black"
+                                />
+                            </div>
+                            <div>
+                                <label html-for="lastName" class="block text-sm mb-1">
+                                    Apellido
+                                </label>
+                                <input
+                                    type="text"
+                                    id="lastName"
+                                    class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-black"
+                                />
+                            </div>
+                            <div class="md:col-span-2">
+                                <label html-for="email" class="block text-sm mb-1">
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-black"
+                                />
+                            </div>
+                            <div class="md:col-span-2">
+                                <label html-for="country" class="block text-sm mb-1">
+                                    País
+                                </label>
+                                <input
+                                    type="text"
+                                    id="country"
+                                    value="Chile"
+                                    disabled
+                                    class="w-full px-3 py-2 border border-gray-300 bg-gray-50 text-gray-500"
+                                />
+                            </div>
+                            <div class="md:col-span-2">
+                                <label html-for="region" class="block text-sm mb-1">
+                                    Region
+                                </label>
+                                <Region server:defer>
+                                    <div slot="fallback" class="relative w-full">
+                                        <select class="w-full appearance-none px-3 pr-10 py-2 border border-gray-300 focus:outline-none focus:border-black cursor-pointer">
+                                            <option value="" disabled selected>
+                                                Selecciona una región
+                                            </option>
+                                        </select>
+                                    </div>
+                                </Region> 
+                            </div>
+                            <div>
+                                <label html-for="city" class="block text-sm mb-1">
+                                    Ciudad
+                                </label>
+                                <input
+                                    type="text"
+                                    id="city"
+                                    class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-black"
+                                />
+                            </div>
+                            <div>
+                                <label html-for="postalCode" class="block text-sm mb-1">
+                                    Código postal
+                                </label>
+                                <input
+                                    type="text"
+                                    id="postalCode"
+                                    class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-black"
+                                />
+                            </div>
+                            <div class="md:col-span-2">
+                                <Address client:load />
+                            </div>
+                            <div class="md:col-span-2">
+                                <label html-for="addressType" class="block text-sm mb-1">
+                                    Casa/Apartamento/Oficina
+                                </label>
+                                <input
+                                    type="text"
+                                    id="addressType"
+                                    placeholder="Casa #123, Apartamento 101, etc"
+                                    class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-black"
+                                />
+                            </div>
+                            <div class="md:col-span-2">
+                                <label html-for="phone" class="block text-sm mb-1">
+                                    Teléfono
+                                </label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-black"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <SelectShipping client:load />
+                    </div>
+                    <div class="space-y-4">
+                        <SelectPayment client:load />
+                    </div>
+                    <button class="w-full py-3 text-sm font-light tracking-wider bg-black text-white" id="processPayment">
+                        PROCEDER AL PAGO
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<script is:inline>
+    const fields = ["firstName", "lastName", "email"];
+
+    let formData = JSON.parse(sessionStorage.getItem("form")) || {
+        firstName: "",
+        lastName: ""
+    };
+
+    fields.forEach((field) => {
+        const input = document.getElementById(field);
+        if (!input) return;
+
+        input.value = formData[field] || "";
+
+        input.addEventListener("input", (e) => {
+            formData[field] = e.target.value;
+            sessionStorage.setItem("form", JSON.stringify(formData));
+        });
+    });
+</script>
+
+<script>
+    import confetti from 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/+esm';
+    const payBtn = document.getElementById("processPayment");
+
+    payBtn?.addEventListener("click", () => {
+        confetti({
+            particleCount: 50,
+            angle: 60,
+            spread: 20,
+            origin: { x: 0, y: 0.6 }
+        });
+
+        confetti({
+            particleCount: 50,
+            angle: 120,
+            spread: 25,
+            origin: { x: 1, y: 0.6 }
+        });
+    });
+</script>

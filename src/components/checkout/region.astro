@@ -1,0 +1,8 @@
+---
+import { getRegions } from "@/db/client";
+import SelectRegion from "@/components/checkout/select-region";
+
+const result = await getRegions();
+---
+
+<SelectRegion regions={result?.data} client:load />

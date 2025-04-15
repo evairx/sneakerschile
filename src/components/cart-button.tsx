@@ -5,7 +5,7 @@ import { CartIcon, CloseIcon } from "@/components/icons"
 
 export default function CartButton() {
     const isCartOpen = useStore(cartOpen)
-    const cartCount = 5;
+    const cartCount = 0;
     const cartItems = [];
 
     const toggleCart = () => {
