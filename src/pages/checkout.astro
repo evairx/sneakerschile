@@ -72,7 +72,7 @@ console.log(nanoid())
                             <div class="md:col-span-2">
                                 <label html-for="region" class="block text-sm mb-1">
                                     Region
-                                </label>
+                                  </label>
                                 <Region server:defer>
                                     <div slot="fallback" class="relative w-full">
                                         <select class="w-full appearance-none px-3 pr-10 py-2 border border-gray-300 focus:outline-none focus:border-black cursor-pointer">
@@ -162,27 +162,6 @@ console.log(nanoid())
         input.addEventListener("input", (e) => {
             formData[field] = e.target.value;
             sessionStorage.setItem("form", JSON.stringify(formData));
-        });
-    });
-</script>
-
-<script>
-    import confetti from 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/+esm';
-    const payBtn = document.getElementById("processPayment");
-
-    payBtn?.addEventListener("click", () => {
-        confetti({
-            particleCount: 50,
-            angle: 60,
-            spread: 20,
-            origin: { x: 0, y: 0.6 }
-        });
-
-        confetti({
-            particleCount: 50,
-            angle: 120,
-            spread: 25,
-            origin: { x: 1, y: 0.6 }
         });
     });
 </script>

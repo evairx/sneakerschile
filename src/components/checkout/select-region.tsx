@@ -7,6 +7,7 @@ interface Shipment {
   price: number;
   content: string;
   payOnDelivery: boolean;
+  adaptive: boolean;
 }
 
 interface Region {
@@ -21,7 +22,7 @@ const open = signal<boolean>(false);
 export default function SelectRegion({ regions }: { regions: Region[] }) {
   return (
     <div className="relative w-full">
-    <select
+      <select
         id="region"
         value={selected.value?.region || ""}
         onClick={() => {
@@ -34,7 +35,7 @@ export default function SelectRegion({ regions }: { regions: Region[] }) {
           const region = regions.find(r => r.region === (e.target as HTMLSelectElement).value);
           if (region) {
             selectedRegion.set(region);
-            console.log(region);
+            selected.value = region;
           }
         }}
         className="w-full appearance-none px-3 pr-10 py-2 border border-gray-300 focus:outline-none focus:border-black cursor-pointer"

@@ -13,11 +13,10 @@ export default defineConfig({
     }
   },
   integrations: [tailwind(), preact()],
-  output: 'server',
   adapter: cloudflare({
     platformProxy: {
       enabled: true,
     },
     imageService: 'cloudflare'
-  }),
+  })
 });
