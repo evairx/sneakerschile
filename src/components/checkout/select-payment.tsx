@@ -40,6 +40,11 @@ export default function SelectPayment() {
                                 )}
                             </div>
                         </div>
+                        {method.name === payment && (method.name === "WebPay" || method.name === "Mach") && (
+                            <div className="mt-2 text-sm">
+                                <p className="text-sm font-light text-gray-500">Pago Procesado Por Flow</p>
+                            </div>
+                        )}
                         {method.name === payment && method.name === "Transfer" && <div className="mt-2 text-sm">
                             <div className="mt-4 p-4 bg-gray-50 border border-gray-200">
                                 <div className="mb-3 pb-3 border-b border-gray-200">

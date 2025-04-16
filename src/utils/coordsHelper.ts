@@ -18,39 +18,45 @@ export async function getCityCoords(city: string): Promise<Coordinates> {
 }
 
 export function haversineDistance(coord1: Coordinates, coord2: Coordinates): number {
-    const R = 6371;
+    const R = 6371; // Radio de la Tierra en km
     const toRad = (deg: number): number => (deg * Math.PI) / 180;
-  
+
     const dLat = toRad(coord2.lat - coord1.lat);
     const dLon = toRad(coord2.lon - coord1.lon);
     const lat1 = toRad(coord1.lat);
     const lat2 = toRad(coord2.lat);
-  
+
     const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+        Math.sin(dLat / 2) ** 2 +
+        Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  
-    return R * c;
+
+    return R * c; // distancia en línea recta
 }
 
 export async function getDistanceKm(city1: string, city2: string): Promise<string> {
     const coord1 = await getCityCoords(city1);
     const coord2 = await getCityCoords(city2);
-    const distance = haversineDistance(coord1, coord2);
-    return distance.toFixed(2);
+    const straightDistance = haversineDistance(coord1, coord2);
+    
+    // Simulación de distancia real por carretera (~30% más que en línea recta)
+    const estimatedRealDistance = straightDistance * 1.3;
+    
+    console.log(`Distancia estimada entre ${city1} y ${city2}: ${estimatedRealDistance.toFixed(2)} km`);
+    return estimatedRealDistance.toFixed(2);
 }
 
 export function calculatePrice(km: number): number {
-    const tarifaBase: number = 1500;
-    const kmBase: number = 7.4;
-    const precioPorKmExtra: number = 200;
-  
+    const tarifaBase = 1500;         // Precio mínimo
+    const kmBase = 7.4;              // Kilómetros incluidos en la tarifa base
+    const precioPorKmExtra = 180;    // Costo por kilómetro adicional
+
     if (km <= kmBase) {
-      return tarifaBase;
+        return tarifaBase;
     }
-  
-    const kmExtra: number = km - kmBase;
-    const costoExtra: number = kmExtra * precioPorKmExtra;
-    return Math.round(tarifaBase + costoExtra);
+
+    const kmExtra = Math.ceil(km - kmBase); // Redondear hacia arriba los km extra
+    const costoExtra = kmExtra * precioPorKmExtra;
+
+    return tarifaBase + costoExtra;
 }
