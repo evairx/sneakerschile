@@ -43,21 +43,22 @@ export default function PayButtonMobile() {
     return (
     <>
         <div className="h-[80px]"></div>
-        <div
+        <aside
             className={`md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-40 transition-transform duration-300
                 ${isButtonVisible ? "translate-y-0" : "translate-y-full"}
                 shadow-lg
             `}
             aria-hidden={!isButtonVisible}
+            role="complementary"
         >
-            <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-medium">Total</span>
-                <span className="text-base font-medium">$0</span>
-            </div>
+            <figure className="flex items-center justify-between mb-3">
+                <figcaption className="text-sm font-medium">Total</figcaption>
+                <output className="text-base font-medium">$0</output>
+            </figure>
             <button class="w-full py-3 text-sm font-light tracking-wider bg-gray-200 text-gray-500 cursor-not-allowed">
                 PROCESAR PAGO
             </button>
-        </div>
+        </aside>
     </>
     )
 }

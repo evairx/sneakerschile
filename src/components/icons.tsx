@@ -6,6 +6,6 @@ export const CloseIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-lineca="round" stroke-linejoin="round" className="w-5 h-5"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
 )
 
-export const DropdownIcon = () => (
-    <svg  xmlns="http://www.w3.org/2000/svg"  width={24}  height={24}  viewBox="0 0 24 24"  fill="none"  stroke="#000000"  strokeWidth={1.5}  strokeLinecap="round"  strokeLinejoin="round"  className="w-5 h-5"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
+export const DropdownIcon = ({ rotate }: { rotate: boolean }) => (
+    <svg  xmlns="http://www.w3.org/2000/svg"  width={24}  height={24}  viewBox="0 0 24 24"  fill="none"  stroke="#000000"  strokeWidth={2}  strokeLinecap="round"  strokeLinejoin="round"  className={`w-5 h-5 text-black transition-transform duration-[.3s] ${rotate ? "rotate-180": ""}`}><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
 )

@@ -16,6 +16,7 @@ interface Region {
 }
 
 const selected = signal<Region | null>(null);
+const open = signal<boolean>(false);
 
 export default function SelectRegion({ regions }: { regions: Region[] }) {
   return (
@@ -23,6 +24,12 @@ export default function SelectRegion({ regions }: { regions: Region[] }) {
     <select
         id="region"
         value={selected.value?.region || ""}
+        onClick={() => {
+          open.value = !open.value;
+        }}
+        onBlur={() => {
+          open.value = false;
+        }}
         onChange={(e) => {
           const region = regions.find(r => r.region === (e.target as HTMLSelectElement).value);
           if (region) {
@@ -42,7 +49,7 @@ export default function SelectRegion({ regions }: { regions: Region[] }) {
         ))}
       </select>
       <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-        <DropdownIcon />
+        <DropdownIcon rotate={open.value}/>
       </div>
     </div>
   );

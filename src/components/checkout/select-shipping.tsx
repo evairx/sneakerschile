@@ -49,7 +49,7 @@ export default function SelectShipping() {
                                     </div>
                                 </div>
                                 <div className={`text-sm ${shipment.name === "Entrega normal" && pLoading ? "flex items-center space-x-4" : "flex items-center space-x-2"}`}>
-                                    {shipment.name === "Entrega normal" && <span class="bg-black text-white px-2 md:px-4 py-[.200rem]">Recomendado</span>}
+                                    {shipment.name === "Entrega normal" && <span class="bg-black text-white text-[.800rem] py-[.100rem] px-[.200rem] md:px-4 md:text-sm md:py-[.200rem] md:px-2">Recomendado</span>}
                                     {shipment.name === "Entrega normal" && pLoading ? (
                                         <span class="inline-block w-4 h-4 border-2 border-t-transparent border-gray-500 rounded-full animate-spin"></span>
                                     ):( 

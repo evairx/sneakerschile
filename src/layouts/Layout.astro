@@ -10,7 +10,7 @@ import { ClientRouter } from 'astro:transitions';
 		<ClientRouter />
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>{`${title} - SneakersChile` || "SneakersChile"}</title>
+		<title>{title ? `${title} - SneakersChile`: "SneakersChile"}</title>
 
 		<meta name="title" content="Zapatillas y Buzos en Chile | SneakersChile">
 		<meta name="description" content="Compra online las mejores zapatillas y buzos en Chile. Calidad premium, precios bajos y despacho a todo el país. ¡Explora nuestra colección hoy!">
