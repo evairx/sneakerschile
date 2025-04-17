@@ -71,6 +71,7 @@ export async function getRegions() {
                     adaptive: Boolean(s.adaptive)
                 })),
                 cities: cities.filter(c => c.region_id === region.id).map(c => ({
+                    id: c.id,
                     name: c.name,
                 }))
             }))
