@@ -30,6 +30,11 @@ export default function SelectShipping() {
                     Seleccione una región para ver las opciones de envío disponibles.
                 </p>
             ) : (
+                region.shipments.length === 0 ? (
+                    <p className="mt-4 border border-gray-300 p-4 bg-gray-50 text-gray-500 text-sm" role="alert">
+                        No hay opciones de envío disponibles para esta región.
+                    </p>
+                ): (
                 <fieldset className="space-y-4">
                     <legend className="sr-only">Seleccione un método de envío</legend>
                     {region.shipments.map((shipment) => (
@@ -112,6 +117,7 @@ export default function SelectShipping() {
                         </label>
                     ))}
                 </fieldset>
+                )
             )}
         </section>
     )

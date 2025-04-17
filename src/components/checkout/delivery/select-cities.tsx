@@ -12,12 +12,15 @@ export default function SelectCities() {
     const region = useStore(selectedRegion)
 
     const handleClick = async (item: City) => {
-        priceLoading.set(true)
         selectedCity.set(item)
-        const fullAddress = `${item.name}, ${region.region}, Chile`
-        const distance = await getDistanceKm(import.meta.env.PUBLIC_VITE_LOCALITATION, fullAddress)
-        priceShipping.set(calculatePrice(parseFloat(distance)))
-        priceLoading.set(false)
+        
+        if(region.id === 'WL8aV2_SKIeh9lYO2wi4x') {
+            priceLoading.set(true)
+            const fullAddress = `${item.name}, ${region.region}, Chile`
+            const distance = await getDistanceKm(import.meta.env.PUBLIC_VITE_LOCALITATION, fullAddress)
+            priceShipping.set(calculatePrice(parseFloat(distance)))
+            priceLoading.set(false)
+        }
     }
     
     return (
