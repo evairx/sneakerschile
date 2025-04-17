@@ -12,6 +12,7 @@ interface Region {
   id: string;
   region: string;
   shipments: Shipment[];
+  cities: any[]
 }
 
 export const selectedRegion = atom<Region>({} as Region);

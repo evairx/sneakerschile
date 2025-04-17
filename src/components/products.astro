@@ -1,6 +1,7 @@
 ---
 import { getProducts } from "@/db/client";
 import { formatPrice } from "@/utils/formatHelper";
+import { Picture } from "astro:assets";
 import AddToCart from "@/components/add-to-cart";
 
 const res = await getProducts();
@@ -23,9 +24,10 @@ const products: any[] = 'data' in res ? res.data : [];
         {products.map((product) => (
             <div class="group">
                  <div class="relative overflow-hidden mb-4">
-                    <img 
+                    <Picture
                         src={product.image || "/placeholder.svg"}
                         alt={product.name}
+                        formats={['webp']}
                         width={400}
                         height={400}
                         class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"

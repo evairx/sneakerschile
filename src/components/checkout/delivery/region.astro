@@ -1,0 +1,7 @@
+---
+import { getRegions } from "@/db/client";
+import SelectRegion from "@/components/checkout/delivery/select-region";
+const result = await getRegions();
+---
+
+<SelectRegion regions={result?.data} client:only/>

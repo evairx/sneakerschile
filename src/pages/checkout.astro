@@ -2,9 +2,10 @@
 import Layout from '@/layouts/Layout.astro';
 import MenuCheckout from '@/components/menu/menu-checkout.astro';
 import InfoCart from '@/components/checkout/info-cart.astro'
-import Region from "@/components/checkout/region.astro"
-import SelectShipping from "@/components/checkout/select-shipping";
-import Address from '@/components/checkout/address';
+import Region from "@/components/checkout/delivery/region.astro";
+import SelectCities from '@/components/checkout/delivery/select-cities';
+import SelectShipping from "@/components/checkout/delivery/select-shipping";
+import Address from '@/components/checkout/delivery/address';
 import SelectPayment from "@/components/checkout/select-payment";
 import PayButtonMobile from '@/components/checkout/paybutton-mobile';
 import { nanoid } from 'nanoid';
@@ -72,26 +73,19 @@ console.log(nanoid())
                             <div class="md:col-span-2">
                                 <label html-for="region" class="block text-sm mb-1">
                                     Region
-                                  </label>
+                                </label>
                                 <Region server:defer>
-                                    <div slot="fallback" class="relative w-full">
-                                        <select class="w-full appearance-none px-3 pr-10 py-2 border border-gray-300 focus:outline-none focus:border-black cursor-pointer">
-                                            <option value="" disabled selected>
-                                                Selecciona una región
-                                            </option>
-                                        </select>
-                                    </div>
-                                </Region> 
+                                    <button slot="fallback" class="w-full flex items-center justify-between px-4 py-2 text-black border border-gray-300 cursor-not-allowed opacity-50" aria-expanded="false" aria-haspopup="true">
+                                        <span class="truncate">Seleccionar Región</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-700 transition-transform duration-200"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </button>
+                                </Region>
                             </div>
                             <div>
                                 <label html-for="city" class="block text-sm mb-1">
                                     Ciudad/Comuna
                                 </label>
-                                <input
-                                    type="text"
-                                    id="city"
-                                    class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-black"
-                                />
+                                <SelectCities client:load />
                             </div>
                             <div>
                                 <label html-for="postalCode" class="block text-sm mb-1">

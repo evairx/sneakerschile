@@ -53,21 +53,26 @@ export async function getRegions() {
         const regions = (await client.execute("SELECT * FROM regions")).rows;
 
         const shipments = (await client.execute("SELECT * FROM shipments")).rows;
+
+        const cities = (await client.execute("SELECT * FROM cities")).rows;
         
         const data = {
             status: 200,
-            data: regions.map(region => ({
+            data: regions.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0))
+            .map(region => ({
                 id: region.id,
                 region: region.name,
-                shipments: shipments
-                    .filter(s => s.region_id === region.id)
-                    .map(s => ({
-                        name: s.name,
-                        price: s.price,
-                        content: s.content,
-                        payOnDelivery: Boolean(s.pay_on_delivery),
-                        adaptive: Boolean(s.adaptive)
-                    }))
+                number: region.number,
+                shipments: shipments.filter(s => s.region_id === region.id).map(s => ({
+                    name: s.name,
+                    price: s.price,
+                    content: s.content,
+                    payOnDelivery: Boolean(s.pay_on_delivery),
+                    adaptive: Boolean(s.adaptive)
+                })),
+                cities: cities.filter(c => c.region_id === region.id).map(c => ({
+                    name: c.name,
+                }))
             }))
         };
         return data;
