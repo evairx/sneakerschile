@@ -15,9 +15,16 @@ interface Region {
   cities: any[]
 }
 
+interface City {
+  id: string;
+  name: string;
+}
+
 export const selectedRegion = atom<Region>({} as Region);
 
 export const selectedShipping = atom<Shipment>({} as Shipment);
+
+export const selectedCity = atom<City>({} as City);
 
 export const priceShipping = atom<number>(0);
 

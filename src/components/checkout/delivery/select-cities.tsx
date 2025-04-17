@@ -1,9 +1,24 @@
 import Selector from "@/components/selector"
-import { selectedRegion } from "@/stores/checkout"
+import { getDistanceKm, calculatePrice} from '@/utils/coordsHelper'
+import { selectedRegion, selectedCity, priceShipping, priceLoading  } from "@/stores/checkout"
 import { useStore } from "@nanostores/preact"
+
+interface City {
+    id: string;
+    name: string;
+}
 
 export default function SelectCities() {
     const region = useStore(selectedRegion)
+
+    const handleClick = async (item: City) => {
+        priceLoading.set(true)
+        selectedCity.set(item)
+        const fullAddress = `${item.name}, ${region.region}, Chile`
+        const distance = await getDistanceKm(import.meta.env.PUBLIC_VITE_LOCALITATION, fullAddress)
+        priceShipping.set(calculatePrice(parseFloat(distance)))
+        priceLoading.set(false)
+    }
     
     return (
         !region.region ? (
@@ -16,6 +31,7 @@ export default function SelectCities() {
                 instanceId="selector-2" 
                 placeholder="Seleccionar Ciudad/Comuna" 
                 items={region.cities}
+                onChange={handleClick}
             />
         )
     )
