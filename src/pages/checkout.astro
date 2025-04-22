@@ -6,11 +6,9 @@ import Region from "@/components/checkout/delivery/region.astro";
 import SelectCities from '@/components/checkout/delivery/select-cities';
 import SelectShipping from "@/components/checkout/delivery/select-shipping";
 import SelectPayment from "@/components/checkout/select-payment";
-import PayButtonMobile from '@/components/checkout/paybutton-mobile';
-import { nanoid } from 'nanoid';
-
-console.log(nanoid())
+import PayButton from '@/components/checkout/paybutton';
 ---
+
 <Layout title="Finaliza tu compra">
     <section class="flex flex-col min-h-screen bg-white">
         <MenuCheckout />
@@ -135,10 +133,7 @@ console.log(nanoid())
                     <div class="space-y-4">
                         <SelectPayment client:load />
                     </div>
-                    <button class="hidden md:block w-full py-3 text-sm font-light tracking-wider bg-black text-white" id="processPayment">
-                        PROCESAR PAGO
-                    </button>
-                    <PayButtonMobile client:load />
+                    <PayButton client:load />
                 </div>
             </div>
         </div>

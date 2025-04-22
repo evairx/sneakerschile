@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from "preact/hooks"
 import { signal } from "@preact/signals"
+import { useQuery } from "@/hook/use-query"
 
 const MOBILE_BREAKPOINT = 768
 const SCROLL_THRESHOLD = 300
@@ -39,26 +40,33 @@ const useScrollVisibility = () => {
 
 export default function PayButtonMobile() {
     const isButtonVisible = useScrollVisibility()
+    const isMobile = useQuery('(min-width: 768px)');
 
     return (
-    <>
-        <div className="h-[80px]"></div>
-        <aside
-            className={`md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-40 transition-transform duration-300
-                ${isButtonVisible ? "translate-y-0" : "translate-y-full"}
-                shadow-lg
-            `}
-            aria-hidden={!isButtonVisible}
-            role="complementary"
-        >
-            <figure className="flex items-center justify-between mb-3">
-                <figcaption className="text-sm font-medium">Total</figcaption>
-                <output className="text-base font-medium">$0</output>
-            </figure>
-            <button class="w-full py-3 text-sm font-light tracking-wider bg-gray-200 text-gray-500 cursor-not-allowed">
+        isMobile ? (
+            <button className="hidden md:block mt-[2rem] w-full py-3 text-sm font-light tracking-wider bg-black text-white" id="processPayment">
                 PROCESAR PAGO
             </button>
-        </aside>
-    </>
+        ): (
+            <>
+            <div className="h-[80px]"></div>
+            <aside
+                className={`md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-40 transition-transform duration-300
+                    ${isButtonVisible ? "translate-y-0" : "translate-y-full"}
+                    shadow-lg
+                `}
+                aria-hidden={!isButtonVisible}
+                role="complementary"
+            >
+                <figure className="flex items-center justify-between mb-3">
+                    <figcaption className="text-sm font-medium">Total</figcaption>
+                    <output className="text-base font-medium">$0</output>
+                </figure>
+                <button class="w-full py-3 text-sm font-light tracking-wider bg-gray-200 text-gray-500 cursor-not-allowed">
+                    PROCESAR PAGO
+                </button>
+            </aside>
+            </>
+        )
     )
 }
