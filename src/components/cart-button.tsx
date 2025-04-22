@@ -5,7 +5,7 @@ import { CartIcon, CloseIcon } from "@/components/icons"
 
 export default function CartButton() {
     const isCartOpen = useStore(cartOpen)
-    const cartCount = 0;
+    const cartCount = 3;
     const cartItems = [];
 
     const toggleCart = () => {
@@ -28,9 +28,9 @@ export default function CartButton() {
         <div className="relative cursor-pointer hover:opacity-70 transition-opacity duration-200 ease-in-out" onClick={toggleCart}>
             <CartIcon/>
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 flex items-center justify-center w-4 h-4 text-[10px] font-medium text-white bg-black rounded-full">
+                <span className="absolute -top-1 -right-2 flex items-center justify-center min-w-4 h-4 text-[11px] px-1 font-medium text-white bg-black rounded-full leading-none">
                 {cartCount}
-              </span>
+                </span>
             )}
         </div>
 

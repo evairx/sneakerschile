@@ -1,3 +1,4 @@
+import { actions } from 'astro:actions';
 import { useEffect, useCallback } from "preact/hooks"
 import { signal } from "@preact/signals"
 import { useQuery } from "@/hook/use-query"
@@ -7,6 +8,7 @@ const SCROLL_THRESHOLD = 300
 
 const isVisible = signal(false)
 const lastScrollY = signal(0)
+const loading = signal(false)
 
 const useScrollVisibility = () => {
     const handleScroll = useCallback(() => {
@@ -44,8 +46,18 @@ export default function PayButtonMobile() {
 
     return (
         isMobile ? (
-            <button className="hidden md:block mt-[2rem] w-full py-3 text-sm font-light tracking-wider bg-black text-white" id="processPayment">
-                PROCESAR PAGO
+            <button 
+                className="hidden md:block mt-[2rem] w-full py-3 text-sm font-light tracking-wider bg-black text-white"
+                onClick={async () => {
+                    loading.value = true
+                }}
+            >
+
+                {loading.value ? (
+                    <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-white"></span>
+                ) : (
+                    "PROCESAR PAGO"
+                )}
             </button>
         ): (
             <>
