@@ -1,5 +1,4 @@
 import Selector from "@/components/selector"
-import { getDistanceKm, calculatePrice} from '@/utils/coordsHelper'
 import { selectedRegion, selectedCity, priceShipping, priceLoading  } from "@/stores/checkout"
 import { useStore } from "@nanostores/preact"
 
@@ -15,11 +14,33 @@ export default function SelectCities() {
         selectedCity.set(item)
         
         if(region.id === 'WL8aV2_SKIeh9lYO2wi4x') {
-            priceLoading.set(true)
-            const fullAddress = `${item.name}, ${region.region}, Chile`
-            const distance = await getDistanceKm(import.meta.env.PUBLIC_VITE_LOCALITATION, fullAddress)
-            priceShipping.set(calculatePrice(parseFloat(distance)))
-            priceLoading.set(false)
+            async function getDistanceData() {
+                priceLoading.set(true)
+
+                const data = await fetch('/api/v1/maps/distance', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        origin: import.meta.env.PUBLIC_VITE_LOCALITATION,
+                        destination: `${item.name}, ${region.region}, Chile`,
+                    })
+                })
+
+                const response = await data.json()
+
+                if (!response) {
+                    console.error('Error al obtener la distancia')
+                    priceLoading.set(false)
+                    return
+                }
+                console.log(response)
+                priceShipping.set(response.price)
+                priceLoading.set(false)
+            }
+
+            await getDistanceData()
         }
     }
     
