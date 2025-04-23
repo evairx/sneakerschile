@@ -1,7 +1,7 @@
-import { actions } from 'astro:actions';
 import { useEffect, useCallback } from "preact/hooks"
 import { signal } from "@preact/signals"
 import { useQuery } from "@/hook/use-query"
+import { actions } from "astro:actions"
 
 const MOBILE_BREAKPOINT = 768
 const SCROLL_THRESHOLD = 300
@@ -50,6 +50,10 @@ export default function PayButtonMobile() {
                 className="hidden md:block mt-[2rem] w-full py-3 text-sm font-light tracking-wider bg-black text-white"
                 onClick={async () => {
                     loading.value = true
+                    const { data , error } = await actions.pay({
+                        email: "sadasdsad"
+                    })
+                    console.log(data)
                 }}
             >
 
