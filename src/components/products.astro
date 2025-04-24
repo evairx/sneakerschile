@@ -31,7 +31,7 @@ const products: any[] = 'data' in res ? res.data : [];
                         height={400}
                         class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <AddToCart values={product.values} id={product.id} client:only />
+                    <AddToCart product={product} id={product.id} client:only />
                  </div>
                  <h3 class="text-sm font-light">{product.name}</h3>
                  <p class="text-sm font-medium mt-1">${formatPrice(product.price)}</p>

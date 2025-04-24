@@ -1,22 +1,36 @@
-import { cart, cartOpen  } from "@/stores/cart"
-import { useStore } from "@nanostores/preact"
+import { cartOpen  } from "@/stores/cart"
 import { signal } from "@preact/signals"
 import { useWindowSize } from "@/hook/use-window-size"
+import { useCart } from "@/hook/use-cart"
 
 interface Values {
-    size: string;
+    id: number;
+    name: string;
+    price: number;
+    category: string;
+    image: string;
+    values: {
+        size: number;
+        stock: number;
+    }[];
+}
+
+interface Size {
+    size: number;
     stock: number;
 }
 
 const selectedSizes = signal<Record<number, string>>({})
 const openSelected = signal<Record<number, boolean>>({})
 
-export default function AddToCart({ values, id }: { values: Values[]; id: number }) {
-    const cartStore = useStore(cart)
+export default function AddToCart({ product, id }: { product: Values; id: number }) {
+    const { addProductToCart } = useCart()
     const windowSize = useWindowSize()
 
     function handleAddToCart() {
         if (!selectedSizes.value[id]) return
+        addProductToCart(product, selectedSizes.value[id])
+        selectedSizes.value = {}
         cartOpen.set(true)
     }
 
@@ -56,17 +70,17 @@ export default function AddToCart({ values, id }: { values: Values[]; id: number
                 <h3 className="text-sm font-medium mb-3">Seleccionar Talla</h3>
                 <div className="flex justify-center align-center w-full">
                     <div className="grid grid-cols-3 gap-2 w-full max-w-[200px]">
-                        {values.map((size) => (
+                        {product.values.map((size: Size) => (
                             <button
                                 key={size.size}
                                 onClick={() => {
                                     if (size.stock > 0) {
-                                        selectedSizes.value = { ...selectedSizes.value, [id]: size.size }
+                                        selectedSizes.value = { ...selectedSizes.value, [id]: size.size.toString() }
                                     }
                                 }}
                                 className={`py-2 px-3 text-xs border ${ size.stock === 0
                                     ? "border-[#4444443a] text-[#4444443a] cursor-not-allowed"
-                                    : selectedSizes.value[id] === size.size
+                                    : selectedSizes.value[id] === size.size.toString()
                                     ? "border-black bg-black text-white"
                                     : "border-gray-300 hover:border-black"
                                     }
