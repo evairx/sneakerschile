@@ -35,7 +35,11 @@ export default function SelectCities() {
                     priceLoading.set(false)
                     return
                 }
-                console.log(response)
+                console.log('Origin: ', import.meta.env.PUBLIC_VITE_LOCALITATION)
+                console.log('Destination: ', `${item.name}, ${region.region}, Chile`)
+
+                console.log('Response: ', response)
+                
                 priceShipping.set(response.price)
                 priceLoading.set(false)
             }

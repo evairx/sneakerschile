@@ -1,12 +1,15 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import MenuCheckout from '@/components/menu/menu-checkout.astro';
-import InfoCart from '@/components/checkout/info-cart.astro'
+import InfoCartMobile from '@/components/checkout/info-cart/mobile.astro';
 import Region from "@/components/checkout/delivery/region.astro";
 import SelectCities from '@/components/checkout/delivery/select-cities';
 import SelectShipping from "@/components/checkout/delivery/select-shipping";
 import SelectPayment from "@/components/checkout/select-payment";
 import PayButton from '@/components/checkout/paybutton';
+import { nanoid } from 'nanoid';
+
+console.log(nanoid())
 ---
 
 <Layout title="Finaliza tu compra">
@@ -20,7 +23,7 @@ import PayButton from '@/components/checkout/paybutton';
             <h1 class="text-2xl font-light mb-8">Finalizar compra</h1>
 
             <div class="grid md:grid-cols-5 gap-12">
-                <InfoCart />
+                <InfoCartMobile />
                 <div class="md:col-span-3 space-y-8">
                     <div class="space-y-4">
                         <h2 class="text-lg font-light">Información de envío</h2>

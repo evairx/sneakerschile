@@ -70,7 +70,7 @@ export default function SelectShipping() {
                                     shipment.name === "Entrega normal" && pLoading ? "flex items-center space-x-4" : "flex items-center space-x-2"
                                 }`}>
                                     {shipment.name === "Entrega normal" && 
-                                        <span className="bg-black text-white text-[.800rem] py-[.100rem] px-[.200rem] md:px-4 md:text-sm md:py-[.200rem] md:px-2">
+                                        <span className="bg-black text-white rounded-full text-[.800rem] py-[.100rem] px-[.200rem] md:px-4 md:text-sm md:py-[.200rem] md:px-2">
                                             Recomendado
                                         </span>
                                     }

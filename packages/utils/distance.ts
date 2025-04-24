@@ -31,7 +31,7 @@ export async function getDistance({ origin, destination, key }: RouteRequest): P
       return undefined;
     }
   
-    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&mode=driving&key=${key}`;
+    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&mode=driving&language=es&key=${key}`;
   
     try {
       const response = await fetch(url);

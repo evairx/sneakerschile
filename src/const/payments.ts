@@ -3,11 +3,10 @@ export const paymentMethods = [
         id: "1",
         name: "WebPay",
         label: "WebPay",
-    },
-    {
-        id: "2",
-        name: "Mach",
-        label: "Mach",
+        images: [
+            'https://assets-prod.evairx.me/visa.svg',
+            'https://assets-prod.evairx.me/mastercard.svg'
+        ]
     },
     {
         id: "3",

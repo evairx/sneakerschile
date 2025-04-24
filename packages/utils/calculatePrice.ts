@@ -1,14 +1,17 @@
 export function calculatePrice(km: number): number {
-    const tarifaBase = 1500;
-    const kmBase = 7.4;
-    const precioPorKmExtra = 180;
+    const tarifaBase = 1500; // Precio mínimo base
+    const kmBase = 7.4;      // Hasta 7.4 km solo se cobra tarifa base
+    const precioPorKmExtra = 120; // MUY barato: $120 por km extra
 
-    if (km <= kmBase) {
+    // Redondear al decimal más cercano (.1 km)
+    const kmRedondeado = Math.round(km * 10) / 10;
+
+    if (kmRedondeado <= kmBase) {
         return tarifaBase;
     }
 
-    const kmExtra = Math.ceil(km - kmBase);
+    const kmExtra = kmRedondeado - kmBase;
     const costoExtra = kmExtra * precioPorKmExtra;
 
-    return tarifaBase + costoExtra;
+    return Math.round(tarifaBase + costoExtra);
 }

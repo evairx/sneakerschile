@@ -9,23 +9,37 @@ export async function POST({ params, request }: { params: any; request: Request 
         const { origin, destination } = await request.json();
 
         if (!origin || !destination) {
-            return Response.json({ error: 'Origin and destination are required' }, { status: 400 });
+            return Response.json({ 
+                error: 'Origin and destination are required' 
+            }, { status: 400 });
         }
-
-        const data = await getDistance({ origin, destination, key: MAPS_API_KEY });
-
-        if (!data) {
-            return Response.json({ error: 'Error al obtener la distancia' }, { status: 500 });
-        }
-
-        const distance = calculatePrice(data.route.km);
         
-        return Response.json({
-            ...data,
-            price: distance
-        } , { status: 200 });
+        const distanceData = await getDistance({ 
+            origin, 
+            destination, 
+            key: MAPS_API_KEY 
+        });
+
+        if (!distanceData) {
+            return Response.json({ 
+                error: 'Error al obtener la distancia desde la API externa' 
+            }, { status: 500 });
+        }
+
+        const price = calculatePrice(distanceData.route.km);
+
+        const routeData = {
+            ...distanceData,
+            price,
+        };
+
+        return Response.json(routeData, { status: 200 });
 
     } catch (error) {
-        return Response.json({ error: 'Error al obtener la distancia' }, { status: 500 });
+        console.error('Error en el procesamiento de la ruta:', error);
+        return Response.json({ 
+            error: 'Error al procesar la solicitud de distancia',
+            details: error instanceof Error ? error.message : String(error)
+        }, { status: 500 });
     }
 }
