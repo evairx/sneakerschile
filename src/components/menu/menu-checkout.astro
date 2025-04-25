@@ -7,7 +7,7 @@ import CartButton from "@/components/cart-button"
         <a href="/" aria-label="Ir al inicio" class="text-xl font-light tracking-widest">SNEAKERSCHILE</a>
         <div class="flex items-center space-x-8">
             <div class="relative cursor-default" aria-label="Carrito de compras" role="button" aria-haspopup="true" aria-expanded="false">
-                <CartButton client:load/>
+                <CartButton client:only>
             </div>
         </div>
     </nav>

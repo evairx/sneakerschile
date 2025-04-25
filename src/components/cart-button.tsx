@@ -8,8 +8,6 @@ import { formatPrice } from "sneakerschile-utils/format"
 export default function CartButton() {
     const isCartOpen = useStore(cartOpen)
     const cartValue = useStore(cart)
-    const cartCount = 3;
-    const cartItems = [];
     const { updateQuantity, removeFromCart } = useCart()
 
     const toggleCart = () => {
@@ -78,7 +76,7 @@ export default function CartButton() {
                                     <div className="flex-1">
                                         <div className="flex justify-between">
                                             <h3 className="text-sm font-medium">{item.name}</h3>
-                                            <button onClick={() => removeFromCart(item)} className="text-gray-500 hover:text-black transition-colors duration-200 ease-in-out">
+                                            <button onClick={() => removeFromCart(item.id)} className="text-gray-500 hover:text-black transition-colors duration-200 ease-in-out">
                                                 <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="none"
