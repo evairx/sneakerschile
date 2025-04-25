@@ -1,4 +1,5 @@
 import { sendEmail } from "sneakerschile-utils/sendEmail";
+import { PLUNK_API_KEY } from "astro:env/server";
 
 export const prerender = false;
 
@@ -6,14 +7,14 @@ export async function POST({ params, request }: { params: any; request: Request 
     try {
         const res = await sendEmail({
             to: '<correo>',
-            subject: '<asunto>',
-            body: `<html>`,
+            subject: `Confirmación de tu pedido #ORD-8721`,
+            body: `<p>Gracias por tu compra!</p>`,
             subscribed: false,
             name: 'SneakersChile',
-            from: 'receipt@evairx.me',
-            reply: 'support@evairx.me',
+            from: 'receipt@<domain>',
+            reply: 'support@<domain>',
             headers: {}
-        }, "token")
+        }, PLUNK_API_KEY)
 
         return Response.json(res.data, { status: res.status });
     } catch (error) {
