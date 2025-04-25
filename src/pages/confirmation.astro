@@ -1,6 +1,7 @@
 ---
-export const prerender = false
-const ord = Astro.url.searchParams.get('ord') || '';
+const ord = Astro.url.searchParams.get('ord');
+
+if (!ord) return Astro.redirect('/');
 
 import Layout from "@/layouts/Layout.astro";
 import MenuCheckout from "@/components/menu/menu-checkout.astro";

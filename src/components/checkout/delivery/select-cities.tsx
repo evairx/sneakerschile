@@ -40,13 +40,10 @@ export default function SelectCities() {
 
                 console.log('Response: ', response)
                 
-                priceShipping.set(response.price)
                 priceLoading.set(false)
             }
 
             await getDistanceData()
-        } else {
-            priceShipping.set(0)
         }
     }
     
