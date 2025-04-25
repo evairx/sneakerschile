@@ -6,7 +6,11 @@ export const paymentMethods = [
         images: [
             'https://assets-prod.evairx.me/visa.svg',
             'https://assets-prod.evairx.me/mastercard.svg'
-        ]
+        ],
+        fee: {
+            iva: 0.19,
+            comision: 0.0319
+        }
     },
     {
         id: "3",
