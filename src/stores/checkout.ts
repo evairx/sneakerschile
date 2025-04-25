@@ -28,6 +28,10 @@ export const selectedCity = atom<City>({} as City);
 
 export const priceShipping = atom<number>(0);
 
+export const subtotal = atom(0)
+
+export const total = atom(0)
+
 export const priceLoading = atom<boolean>(false);
 
 export const selectedPayment = atom<string>("");

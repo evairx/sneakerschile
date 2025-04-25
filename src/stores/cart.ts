@@ -1,35 +1,51 @@
 import { atom } from 'nanostores';
+import { subtotal } from './checkout';
 
 export const cartOpen = atom(false);
 
-const defaultCart = { items: [], subtotal: 0 }
+const defaultCart = { items: [] };
+
+const calculateSubtotal = (items: any[]) => {
+  return items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+};
 
 const getCookie = (name: string) => {
   return document.cookie
     .split('; ')
     .find(row => row.startsWith(name + '='))
-    ?.split('=')[1]
-}
+    ?.split('=')[1];
+};
 
-const setCookie = (name: string, value: object) => {
-  document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))}; path=/`
-}
+const setCookie = (name: string, value: object, days = 7) => {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  const encoded = encodeURIComponent(JSON.stringify(value));
+  document.cookie = `${name}=${encoded}; path=/; expires=${expires}; SameSite=Lax`;
+};
 
-// Cargar desde cookie o crear por defecto
 const initialCart = (() => {
-  const raw = getCookie('cart')
+  const raw = getCookie('cart');
   if (raw) {
     try {
-      return JSON.parse(decodeURIComponent(raw))
-    } catch {}
+      const parsedCart = JSON.parse(decodeURIComponent(raw));
+      const { subtotal: _, ...cartWithoutSubtotal } = parsedCart;
+      
+      const totalPrice = calculateSubtotal(parsedCart.items);
+      subtotal.set(totalPrice);
+      
+      return cartWithoutSubtotal;
+    } catch (e) {
+      console.error('Error parsing cart cookie:', e);
+    }
   }
-  setCookie('cart', defaultCart)
-  return defaultCart
-})()
+  subtotal.set(0);
+  setCookie('cart', defaultCart);
+  return defaultCart;
+})();
 
-export const cart = atom(initialCart)
+export const cart = atom(initialCart);
 
-// Guardar cambios automáticamente
 cart.subscribe(value => {
-  setCookie('cart', value)
-})
+  const totalPrice = calculateSubtotal(value.items);
+  subtotal.set(totalPrice);
+  setCookie('cart', value);
+});

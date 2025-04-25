@@ -45,6 +45,8 @@ export default function SelectCities() {
             }
 
             await getDistanceData()
+        } else {
+            priceShipping.set(0)
         }
     }
     

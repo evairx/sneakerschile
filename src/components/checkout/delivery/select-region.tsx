@@ -1,4 +1,4 @@
-import { selectedRegion } from "@/stores/checkout";
+import { selectedRegion, priceShipping } from "@/stores/checkout";
 import Selector from "@/components/selector"
 
 interface Shipment {
@@ -19,6 +19,7 @@ export default function SelectRegion({ regions }: { regions: Region[] }) {
   
   const handleClick = (item: Region) => {
     selectedRegion.set(item);
+    priceShipping.set(0)
   }
 
   return (

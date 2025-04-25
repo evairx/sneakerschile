@@ -1,6 +1,9 @@
 import { useEffect, useCallback } from "preact/hooks"
+import { subtotal, priceShipping } from "@/stores/checkout"
+import { useStore } from "@nanostores/preact"
 import { signal } from "@preact/signals"
 import { useQuery } from "@/hook/use-query"
+import { formatPrice } from "sneakerschile-utils/format"
 import { actions } from "astro:actions"
 
 const MOBILE_BREAKPOINT = 768
@@ -41,6 +44,8 @@ const useScrollVisibility = () => {
 }
 
 export default function PayButtonMobile() {
+    const subtotalValue = useStore(subtotal)
+    const shippingValue = useStore(priceShipping)
     const isButtonVisible = useScrollVisibility()
     const isMobile = useQuery('(min-width: 768px)');
 
@@ -76,7 +81,7 @@ export default function PayButtonMobile() {
             >
                 <figure className="flex items-center justify-between mb-3">
                     <figcaption className="text-sm font-medium">Total</figcaption>
-                    <output className="text-base font-medium">$0</output>
+                    <output className="text-base font-medium">${formatPrice(subtotalValue+shippingValue)}</output>
                 </figure>
                 <button class="w-full py-3 text-sm font-light tracking-wider bg-gray-200 text-gray-500 cursor-not-allowed">
                     PROCESAR PAGO

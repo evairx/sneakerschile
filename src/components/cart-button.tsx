@@ -1,4 +1,5 @@
 import { cartOpen, cart } from "@/stores/cart"
+import { subtotal } from "@/stores/checkout"
 import { useStore } from "@nanostores/preact"
 import { useEffect } from "preact/hooks"
 import { CartIcon, CloseIcon } from "@/components/icons"
@@ -8,6 +9,7 @@ import { formatPrice } from "sneakerschile-utils/format"
 export default function CartButton() {
     const isCartOpen = useStore(cartOpen)
     const cartValue = useStore(cart)
+    const cartSubtotal = useStore(subtotal)
     const { updateQuantity, removeFromCart } = useCart()
 
     const toggleCart = () => {
@@ -25,6 +27,13 @@ export default function CartButton() {
             document.body.style.overflow = "auto";
         };
     },[isCartOpen])
+
+    const handleCheckout = () => {
+        if (cartValue.items.length > 0) {
+            window.location.href = "/checkout"
+            cartOpen.set(!isCartOpen)
+        }
+    }
 
     return (
         <>
@@ -101,7 +110,7 @@ export default function CartButton() {
                                             >
                                                 -
                                             </button>
-                                            <span className="w-8 h-8 flex items-center justify-center border-t border-b border-gray-200">
+                                            <span className="w-8 h-8 flex text-sm items-center justify-center border-t border-b border-gray-200">
                                                 {item.quantity}
                                             </span>
                                             <button
@@ -121,11 +130,12 @@ export default function CartButton() {
                 <div className="p-6 border-t border-gray-100">
                     <div className="flex justify-between mb-4">
                         <span className="text-sm">Subtotal</span>
-                        <span className="text-sm font-medium">${formatPrice(cartValue.subtotal)}</span>
+                        <span className="text-sm font-medium">${formatPrice(cartSubtotal)}</span>
                     </div>
                     <button
                         className={`w-full bg-black text-white py-3 text-sm font-light border tracking-wider ${cartValue.items.length > 0 && "hover:opacity-70"} disabled:bg-gray-200 disabled:text-gray-500transition-colors duration-200 ease-in-out`}
                         disabled={cartValue.items.length === 0}
+                        onClick={handleCheckout}
                     >
                         COMPRAR
                     </button>

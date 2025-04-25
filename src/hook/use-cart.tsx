@@ -1,56 +1,59 @@
 import { useCallback } from 'preact/hooks'
+import { subtotal } from '@/stores/checkout'
 import { cart } from '@/stores/cart'
 import { nanoid } from 'nanoid'
 
 export function useCart() {
+  const calculateSubtotal = (items: any[]) => {
+    return items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0)
+  }
+
   const addProductToCart = useCallback((product: {
-        id: number,
-        name: string,
-        price: number,
-        category: string,
-        image: string,
-        values: { size: number, stock: number }[]
+    id: number,
+    name: string,
+    price: number,
+    category: string,
+    image: string,
+    values: { size: number, stock: number }[]
   }, size: string) => {
-        const current = cart.get()
-        const itemIndex = current.items.findIndex(
-        (item: any) => item.productId === product.id && item.size === size
-        )
+    const current = cart.get()
+    const itemIndex = current.items.findIndex(
+      (item: any) => item.productId === product.id && item.size === size
+    )
 
-        let updatedItems
+    let updatedItems
 
-        if (itemIndex > -1) {
-        updatedItems = current.items.map((item: any, index: number) => {
-            if (index === itemIndex) {
-            return {
-                ...item,
-                quantity: item.quantity + 1
-            }
-            }
-            return item
-        })
-        } else {
-        const newItem = {
-            id: nanoid(),
-            productId: product.id,
-            name: product.name,
-            price: product.price,
-            image: product.image,
-            quantity: 1,
-            size: size,
+    if (itemIndex > -1) {
+      updatedItems = current.items.map((item: any, index: number) => {
+        if (index === itemIndex) {
+          return {
+            ...item,
+            quantity: item.quantity + 1
+          }
         }
-        updatedItems = [...current.items, newItem]
-        }
+        return item
+      })
+    } else {
+      const newItem = {
+        id: nanoid(),
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        quantity: 1,
+        size: size,
+      }
+      updatedItems = [...current.items, newItem]
+    }
 
-        const newSubtotal = updatedItems.reduce((sum: number, item: any) => {
-        return sum + item.price * item.quantity
-        }, 0)
+    const newSubtotalValue = calculateSubtotal(updatedItems)
+    subtotal.set(newSubtotalValue)
 
-        cart.set({
-        ...current,
-        items: updatedItems,
-        subtotal: newSubtotal
-        })
-    }, [])
+    cart.set({
+      ...current,
+      items: updatedItems
+    })
+  }, [])
 
   const updateQuantity = useCallback((id: number, quantity: number) => {
     const current = cart.get()
@@ -67,14 +70,12 @@ export function useCart() {
       })
     }
 
-    const newSubtotal = updatedItems.reduce((sum: number, item: any) => {
-      return sum + item.price * item.quantity
-    }, 0)
+    const newSubtotalValue = calculateSubtotal(updatedItems)
+    subtotal.set(newSubtotalValue)
 
     cart.set({
       ...current,
-      items: updatedItems,
-      subtotal: newSubtotal
+      items: updatedItems
     })
   }, [])
 
@@ -83,16 +84,18 @@ export function useCart() {
 
     const updatedItems = current.items.filter((item: any) => item.id !== id)
 
-    const newSubtotal = updatedItems.reduce((sum: number, item: any) => {
-      return sum + item.price * item.quantity
-    }, 0)
+    const newSubtotalValue = calculateSubtotal(updatedItems)
+    subtotal.set(newSubtotalValue)
 
     cart.set({
       ...current,
-      items: updatedItems,
-      subtotal: newSubtotal
+      items: updatedItems
     })
   }, [])
 
-  return { addProductToCart, updateQuantity, removeFromCart }
+  return { 
+    addProductToCart, 
+    updateQuantity, 
+    removeFromCart 
+  }
 }

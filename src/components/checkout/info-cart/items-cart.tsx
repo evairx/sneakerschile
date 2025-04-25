@@ -1,7 +1,11 @@
 import { formatPrice } from 'sneakerschile-utils/format'
 import { useState } from 'preact/hooks'
+import { cart } from '@/stores/cart'
+import { useStore } from '@nanostores/preact'
 
 export default function ItemsCart() {
+    const cartValue = useStore(cart)
+
     const sampleCartItems = [
         { id: 1, name: "Product 1", quantity: 2, price: 29.99, image: "/product1.jpg" },
     ]
@@ -12,14 +16,14 @@ export default function ItemsCart() {
     
     return (
       <div className="space-y-4 mb-6 p-4">
-        {displayedItems.map((item) => (
+        {cartValue.items.map((item) => (
           <div key={item.id} className="flex space-x-4 py-2 border-b border-gray-100 last:border-b-0">
             <div className="w-16 h-16 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
               <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
             </div>
             <div className="flex-1">
               <h3 className="text-sm font-medium">{item.name}</h3>
-              <p className="text-sm text-gray-500 mt-1">Cantidad: {item.quantity}</p>
+              <p className="text-sm text-gray-500 mt-1">Cantidad: {item.quantity} - Talla: {item.size}</p>
               <p className="text-sm mt-1">${formatPrice(item.price)}</p>
             </div>
           </div>
