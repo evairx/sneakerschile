@@ -1,32 +1,54 @@
 ---
+export const prerender = false;
 const ord = Astro.url.searchParams.get('ord');
 
 if (!ord) return Astro.redirect('/');
 
 import Layout from "@/layouts/Layout.astro";
 import MenuCheckout from "@/components/menu/menu-checkout.astro";
+
+const status = "pending";
 ---
 
 <Layout title="Confirmación de compra">
     <div class="min-h-screen flex flex-col">
         <MenuCheckout />
 
-        <main class="flex-1 container mx-auto px-4 py-24 max-w-3xl">
-            <div class="flex items-center mb-8">
+        <main class="flex-1 container mx-auto px-2 md:px-4 py-24 max-w-3xl">
+            <div class="flex items-center mb-8 px-4">
                 <a href="/" class="flex items-center text-sm text-gray-500 hover:text-black">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
                     Volver a la tienda
                 </a>
                 <div class="ml-auto flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-green-500 mr-2"><path d="M20 6 9 17l-5-5"></path></svg>
-                    <span class="text-sm font-medium">Pedido confirmado</span>
+                    {status === 'pending' && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-yellow-300 mr-2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span class="text-sm font-medium">Transacción en curso</span>
+                    )}
+                    {status === 'sucess' && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-green-500 mr-2"><path d="M20 6 9 17l-5-5"></path></svg>
+                        <span class="text-sm font-medium">Pedido confirmado</span>
+                    )}
                 </div>
             </div>
 
-            <div class="mb-8">
-                <h1 class="text-2xl font-medium mb-2">Gracias por tu compra</h1>
+            {status === 'pending' && <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
+                <div class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-yellow-300 mr-3 mt-0.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+                    <div>
+                        <h3 class="font-medium">Pago pendiente</h3>
+                        <p class="text-sm text-gray-600">
+                            Tu pedido está pendiente de pago. Por favor, completa la transacción para procesar tu pedido.
+                        </p>
+                    </div>
+                </div>
+            </div>}
+
+            <div class="mb-8 px-4">
+                <h1 class="text-2xl font-medium mb-2">{status === "sucess" ? "Gracias por tu compra" : "Tu pedido está casi listo"}</h1>
                 <p class="text-gray-500">
-                    Hemos enviado un correo de confirmación a <span class="font-medium">user@gmail.com</span>
+                    {status === "sucess" ? "Hemos enviado un correo de confirmación a " : "Completa el pago para finalizar tu compra."}
+                    {status === "sucess" && <span class="font-medium">user@gmail.com</span>}
                 </p>
             </div>
 
@@ -40,7 +62,7 @@ import MenuCheckout from "@/components/menu/menu-checkout.astro";
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">Fecha</p>
-                                <p class="font-light">25 Abril, 2025</p>
+                                <p class="font-medium">25 Abril, 2025</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">Email</p>
@@ -51,28 +73,36 @@ import MenuCheckout from "@/components/menu/menu-checkout.astro";
                 </div>
             </div>
 
-            <div class="bg-white border rounded-lg shadow-sm mb-8">
-                <div class="p-6">
-                    <h2 class="text-lg font-medium mb-4">Productos</h2>
+            {status === 'sucess' && (
+                <div class="bg-white border rounded-lg shadow-sm mb-8">
+                    <div class="p-6">
+                        <h2 class="text-lg font-medium mb-4">Productos</h2>
 
-                    <div class="space-y-4">
+                        <div class="space-y-4">
 
-                    </div>
-
-                    <div class="h-px bg-gray-200 my-6"></div>
-
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="font-medium">Método de pago</p>
-                            <p class="text-sm text-gray-500">Webpay</p>
                         </div>
-                        <div class="text-right">
-                            <p class="text-sm text-gray-500">Total</p>
-                            <p class="text-xl font-medium">$50.000</p>
+
+                        <div class="h-px bg-gray-200 my-6"></div>
+
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-medium">Método de pago</p>
+                                <p class="text-sm text-gray-600">Webpay</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm text-gray-600">Total</p>
+                                <p class="text-xl font-medium">$50.000</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-2">
+                            <div>
+                                <p class="font-medium">Método de envio</p>
+                                <p class="text-sm text-gray-600">Starken</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div>  
+            )}
         </main>
     </div>
 </Layout>

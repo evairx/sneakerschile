@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "preact/hooks"
-import { subtotal, priceShipping } from "@/stores/checkout"
+import { subtotal, priceShipping, selectedShipping, selectedPayment } from "@/stores/checkout"
 import { useStore } from "@nanostores/preact"
 import { signal } from "@preact/signals"
 import { useQuery } from "@/hook/use-query"
@@ -46,22 +46,35 @@ const useScrollVisibility = () => {
 export default function PayButtonMobile() {
     const subtotalValue = useStore(subtotal)
     const shippingValue = useStore(priceShipping)
+    const selectedShippingValue = useStore(selectedShipping)
+    const selectedPaymentValue = useStore(selectedPayment)
     const isButtonVisible = useScrollVisibility()
     const isMobile = useQuery('(min-width: 768px)');
+    
+    const isPaymentValid = typeof selectedPaymentValue === 'string' && selectedPaymentValue.trim() !== '';
+    const isShippingValid = selectedShippingValue && typeof selectedShippingValue === 'object' && 'id' in selectedShippingValue;
+    
+    const isButtonEnabled = Boolean(isPaymentValid && isShippingValid);
 
+    const handleButtonPay = async () => {
+        if (!isButtonEnabled) return;
+                    
+        loading.value = true;
+        console.log(selectedPaymentValue);
+        console.log(selectedShippingValue);
+    }
+    
     return (
         isMobile ? (
             <button 
-                className="hidden md:block mt-[2rem] w-full py-3 text-sm font-light tracking-wider bg-black text-white"
-                onClick={async () => {
-                    loading.value = true
-                    const { data , error } = await actions.pay({
-                        email: "sadasdsad"
-                    })
-                    console.log(data)
-                }}
+                className={`hidden md:block mt-[2rem] w-full py-3 text-sm font-light tracking-wider ${
+                    isButtonEnabled 
+                        ? "bg-black text-white" 
+                        : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                }`}
+                onClick={handleButtonPay}
+                disabled={!isButtonEnabled}
             >
-
                 {loading.value ? (
                     <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-white"></span>
                 ) : (
@@ -83,8 +96,20 @@ export default function PayButtonMobile() {
                     <figcaption className="text-sm font-medium">Total</figcaption>
                     <output className="text-base font-medium">${formatPrice(subtotalValue+shippingValue)}</output>
                 </figure>
-                <button class="w-full py-3 text-sm font-light tracking-wider bg-gray-200 text-gray-500 cursor-not-allowed">
-                    PROCESAR PAGO
+                <button 
+                    className={`w-full py-3 text-sm font-light tracking-wider ${
+                        isButtonEnabled 
+                            ? "bg-black text-white" 
+                            : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    }`}
+                    onClick={handleButtonPay }
+                    disabled={!isButtonEnabled}
+                >
+                    {loading.value ? (
+                        <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-white"></span>
+                    ) : (
+                        "PROCESAR PAGO"
+                    )}
                 </button>
             </aside>
             </>

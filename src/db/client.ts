@@ -64,6 +64,7 @@ export async function getRegions() {
                 region: region.name,
                 number: region.number,
                 shipments: shipments.filter(s => s.region_id === region.id).map(s => ({
+                    id: s.id,
                     name: s.name,
                     price: s.price,
                     content: s.content,

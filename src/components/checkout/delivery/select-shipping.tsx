@@ -18,9 +18,7 @@ export default function SelectShipping() {
 
     const setShippingMethod = (shipment: Shipment) => {
         selectedShipping.set(shipment)
-        console.log(shipping)
     }
-
     return (
         <section aria-labelledby="shipping-heading">
             <h2 id="shipping-heading" className="text-lg font-light">Método de envío</h2>
