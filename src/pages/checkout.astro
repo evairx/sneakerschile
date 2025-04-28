@@ -161,3 +161,22 @@ import { nanoid } from 'nanoid';
         });
     });
 </script>
+
+<script>
+    try {
+        const cartCookie = document.cookie.split('; ').find(row => row.startsWith('cart='));
+        if (cartCookie) {
+            const encodedCart = cartCookie.split('=')[1];
+            const decodedCart = decodeURIComponent(encodedCart);
+            const cart = JSON.parse(decodedCart);
+
+            if (!cart.items || cart.items.length === 0) {
+                window.location.href = '/';
+            }
+        } else {
+            window.location.href = '/';
+        }
+    } catch (error) {
+        window.location.href = '/';
+    }
+</script>

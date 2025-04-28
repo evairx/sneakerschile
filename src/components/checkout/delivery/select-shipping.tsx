@@ -18,6 +18,7 @@ export default function SelectShipping() {
 
     const setShippingMethod = (shipment: Shipment) => {
         selectedShipping.set(shipment)
+        priceShipping.set(shipment.price)
     }
     return (
         <section aria-labelledby="shipping-heading">
@@ -84,7 +85,7 @@ export default function SelectShipping() {
                                                 ? shipment.content
                                                 : shipment.price === 0 
                                                     ? "Gratis" 
-                                                    : `$${formatPrice(shipment.adaptive ? (price || shipment.price) : shipment.price)}`
+                                                    : `$${formatPrice(shipment.price)}`
                                             }
                                         </span>
                                     )}

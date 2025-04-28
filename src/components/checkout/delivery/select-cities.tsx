@@ -1,5 +1,5 @@
 import Selector from "@/components/selector"
-import { selectedRegion, selectedCity, priceShipping, priceLoading  } from "@/stores/checkout"
+import { selectedRegion, selectedCity, priceLoading  } from "@/stores/checkout"
 import { useStore } from "@nanostores/preact"
 
 interface City {
@@ -35,10 +35,19 @@ export default function SelectCities() {
                     priceLoading.set(false)
                     return
                 }
-                console.log('Origin: ', import.meta.env.PUBLIC_VITE_LOCALITATION)
-                console.log('Destination: ', `${item.name}, ${region.region}, Chile`)
 
-                console.log('Response: ', response)
+                selectedRegion.set({
+                    ...region,
+                    shipments: region.shipments.map((shipment) => {
+                        if (shipment.adaptive) {
+                            return {
+                                ...shipment,
+                                price: response.price
+                            }
+                        }
+                        return shipment
+                    })
+                })
                 
                 priceLoading.set(false)
             }

@@ -48,6 +48,63 @@ export async function getProducts() {
     }
 }
 
+export async function getProductById(id: string) {
+    try {
+        const product = (await client.execute("SELECT * FROM products WHERE id = ?", [id])).rows[0];
+        const sizes = (await client.execute("SELECT product_id, size, stock FROM product_sizes WHERE product_id = ?", [id])).rows;
+        
+        if (!product) {
+            return {
+                status: 404,
+                error: 'Product not found'
+            };
+        }
+
+        const data = {
+            status: 200,
+            data: {
+                ...product,
+                values: sizes.map(s => ({
+                    size: s.size,
+                    stock: s.stock
+                }))
+            }
+        };
+        return data
+    } catch (error) {
+        const data = {
+            status: 500,
+            error: error instanceof Error ? error.message : 'Unknown error'
+        }
+        return data
+    }
+}
+
+export async function getShippingById(id: string) {
+    try {
+        const shipping = (await client.execute("SELECT * FROM shipments WHERE id = ?", [id])).rows[0];
+        
+        if (!shipping) {
+            return {
+                status: 404,
+                error: 'Shipping not found'
+            };
+        }
+
+        const data = {
+            status: 200,
+            data: shipping
+        };
+        return data
+    } catch (error) {
+        const data = {
+            status: 500,
+            error: error instanceof Error ? error.message : 'Unknown error'
+        }
+        return data
+    }
+}
+
 export async function getRegions() {
     try {
         const regions = (await client.execute("SELECT * FROM regions")).rows;

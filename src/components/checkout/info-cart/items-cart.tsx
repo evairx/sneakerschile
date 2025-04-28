@@ -5,14 +5,9 @@ import { useStore } from '@nanostores/preact'
 
 export default function ItemsCart() {
     const cartValue = useStore(cart)
-
-    const sampleCartItems = [
-        { id: 1, name: "Product 1", quantity: 2, price: 29.99, image: "/product1.jpg" },
-    ]
-    
     const [showAll, setShowAll] = useState(false)
-    const displayedItems = showAll ? sampleCartItems : sampleCartItems.slice(0, 2)
-    const hasMoreItems = sampleCartItems.length > 2
+
+    const hasMoreItems = cartValue.items.length > 2
     
     return (
       <div className="space-y-4 mb-6 p-4">

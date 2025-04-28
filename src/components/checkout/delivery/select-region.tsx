@@ -1,4 +1,4 @@
-import { selectedRegion, priceShipping } from "@/stores/checkout";
+import { selectedRegion, priceShipping, selectedCity } from "@/stores/checkout";
 import Selector from "@/components/selector"
 
 interface Shipment {

@@ -1,7 +1,7 @@
 export const paymentMethods = [
     {
         id: "1",
-        name: "WebPay",
+        name: "Webpay",
         label: "WebPay",
         images: [
             'https://assets-prod.evairx.me/visa.svg',

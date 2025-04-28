@@ -1,12 +1,26 @@
 import { paymentMethods } from "@/const/payments"
-import { selectedPayment } from "@/stores/checkout"
+import { selectedPayment, tax, subtotal, priceShipping } from "@/stores/checkout"
 import { useStore } from "@nanostores/preact"
 
 export default function SelectPayment() {
     const payment = useStore(selectedPayment)
+    const subtotalValue = useStore(subtotal)
+    const shippingValue = useStore(priceShipping)
 
-    const setPaymentMethod = (method: string) => {
-        selectedPayment.set(method)
+    const setPaymentMethod = (method: any) => {
+        selectedPayment.set(method.name)
+        const total = subtotalValue+shippingValue
+
+        if (method?.fee) {
+            let fee = total * method.fee.comision;
+            const ivaOnFee = fee * method.fee.iva;
+            fee += ivaOnFee;
+            const feeTotalRedondeado = Math.round(fee);
+    
+            tax.set(feeTotalRedondeado);
+        } else {
+            tax.set(0);
+        }
     }
 
     return (
@@ -17,7 +31,7 @@ export default function SelectPayment() {
                     <div 
                         key={method.id} 
                         className={`border p-4 cursor-pointer transition-colors ${method.name === payment ? "border-gray-900" : "border-gray-300 hover:border-gray-400"}`}
-                        onClick={() => setPaymentMethod(method.name)}
+                        onClick={() => setPaymentMethod(method)}
                     >
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">

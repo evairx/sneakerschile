@@ -19,6 +19,7 @@ export const createPayment = async (config: Config, paymentData: PaymentParams):
         currency: paymentData.currency || 'CLP',
         amount: validateNumber(paymentData.amount),
         email: paymentData.email,
+        paymentMethod: paymentData.paymentMethod,
         urlConfirmation: paymentData.urlConfirmation,
         urlReturn: paymentData.urlReturn,
         optional: JSON.stringify(paymentData.optional || {}),

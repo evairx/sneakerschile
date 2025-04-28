@@ -228,8 +228,8 @@ export async function POST({ params, request }: { params: any; request: Request 
             body: html,
             subscribed: false,
             name: 'SneakersChile',
-            from: 'receipt@<correo>',
-            reply: 'support@<correo>',
+            from: 'receipt@evairx.me',
+            reply: 'support@evairx.me',
             headers: {}
         }, PLUNK_API_KEY);
 

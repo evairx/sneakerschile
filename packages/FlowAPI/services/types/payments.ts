@@ -95,6 +95,7 @@ export interface PaymentParams {
      * @type {string}
      * @required
      */
+    paymentMethod: string;
     urlConfirmation: string;
     /**
      * URL to redirect after payment completion

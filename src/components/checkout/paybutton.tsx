@@ -1,10 +1,21 @@
 import { useEffect, useCallback } from "preact/hooks"
-import { subtotal, priceShipping, selectedShipping, selectedPayment } from "@/stores/checkout"
+import { subtotal, priceShipping, selectedShipping, selectedPayment, tax } from "@/stores/checkout"
 import { useStore } from "@nanostores/preact"
 import { signal } from "@preact/signals"
 import { useQuery } from "@/hook/use-query"
-import { formatPrice } from "sneakerschile-utils/format"
+import TotalValue from "@/components/checkout/info-cart/total-value"
 import { actions } from "astro:actions"
+
+interface CartItem {
+    id: string;
+    quantity: number;
+    [key: string]: any; // for other properties in the original item
+}
+
+interface SimplifiedCartItem {
+    id: string;
+    quantity: number;
+}
 
 const MOBILE_BREAKPOINT = 768
 const SCROLL_THRESHOLD = 300
@@ -43,11 +54,29 @@ const useScrollVisibility = () => {
     return isVisible.value
 }
 
+const getCartFromCookies = () => {
+    const cookies = document.cookie.split(';')
+    let cartCookie = cookies.find(cookie => cookie.trim().startsWith('cart='))
+    
+    if (cartCookie) {
+        try {
+            const cartString = decodeURIComponent(cartCookie.split('=')[1])
+            return JSON.parse(cartString)
+        } catch (error) {
+            console.error('Error parsing cart cookie:', error)
+            return { items: [] }
+        }
+    }
+    
+    return { items: [] }
+}
+
 export default function PayButtonMobile() {
     const subtotalValue = useStore(subtotal)
     const shippingValue = useStore(priceShipping)
     const selectedShippingValue = useStore(selectedShipping)
     const selectedPaymentValue = useStore(selectedPayment)
+    const taxValue = useStore(tax)
     const isButtonVisible = useScrollVisibility()
     const isMobile = useQuery('(min-width: 768px)');
     
@@ -60,8 +89,20 @@ export default function PayButtonMobile() {
         if (!isButtonEnabled) return;
                     
         loading.value = true;
-        console.log(selectedPaymentValue);
-        console.log(selectedShippingValue);
+        const cartData = getCartFromCookies()
+
+        const simplifiedItems: SimplifiedCartItem[] = cartData.items.map((item: CartItem) => ({
+            id: item.productId,
+            quantity: item.quantity
+        }))
+
+        const formattedCart = {
+            items: simplifiedItems,
+            shipping: selectedShippingValue.id,
+            payment: selectedPaymentValue
+        }
+    
+        console.log('cart:', formattedCart);
     }
     
     return (
@@ -94,7 +135,7 @@ export default function PayButtonMobile() {
             >
                 <figure className="flex items-center justify-between mb-3">
                     <figcaption className="text-sm font-medium">Total</figcaption>
-                    <output className="text-base font-medium">${formatPrice(subtotalValue+shippingValue)}</output>
+                    <output className="text-base font-medium">$<TotalValue/></output>
                 </figure>
                 <button 
                     className={`w-full py-3 text-sm font-light tracking-wider ${
