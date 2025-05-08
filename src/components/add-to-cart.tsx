@@ -1,4 +1,5 @@
 import { cartOpen  } from "@/stores/cart"
+import { useEffect, useRef } from "preact/hooks"
 import { signal } from "@preact/signals"
 import { useWindowSize } from "@/hook/use-window-size"
 import { useCart } from "@/hook/use-cart"
@@ -26,6 +27,24 @@ const openSelected = signal<Record<number, boolean>>({})
 export default function AddToCart({ product, id }: { product: Values; id: number }) {
     const { addProductToCart } = useCart()
     const windowSize = useWindowSize()
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                openSelected.value = { ...openSelected.value, [id]: false }
+            }
+        }
+        
+        // Solo añadimos el listener si el selector está abierto
+        if (openSelected.value[id]) {
+            document.addEventListener('mousedown', handleClickOutside)
+        }
+        
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [openSelected.value[id]])
 
     function handleAddToCart() {
         if (!selectedSizes.value[id]) return
@@ -36,68 +55,46 @@ export default function AddToCart({ product, id }: { product: Values; id: number
 
     function handleSelectSize(id: number) {
         if (openSelected.value[id]) return
-
+        
         openSelected.value = {
-            ...openSelected.value,
-            [id]: !openSelected.value[id]
+            [id]: true
         }
     }
 
+    function handleSizeClick(size: string) {
+        selectedSizes.value = { ...selectedSizes.value, [id]: size }
+    }
+
     return (
-        windowSize.value.width < 769 ? (
-            openSelected.value[id] ? (
-                <div className="absolute inset-0 bg-[#ffffff57]  backdrop-blur-sm flex flex-col justify-center items-center p-4 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto">
-                     <h3 className="text-sm font-medium mb-3">Seleccionar Talla</h3>
-                    <button 
-                        onClick={handleAddToCart}
-                        className={`w-full mt-6 py-2 text-sm font-light tracking-wider transition-colors duration-200 ease-in-out ${selectedSizes.value[id] ? "bg-[#000] text-white" : "bg-white text-black opacity-30 cursor-not-allowed"}`}
-                    >
-                        AÑADIR AL CARRITO
-                    </button>
+        <div className="relative" ref={containerRef}>
+            <button onClick={() => handleSelectSize(id)} class="w-full py-2 text-sm font-medium rounded transition-colors duration-200 border border-black text-black hover:bg-black hover:text-white">
+                Seleccionar Talla
+            </button>
+            
+            {openSelected.value[id] && (
+            <div className="absolute left-0 right-0 bottom-[40px] bg-white border-t border-gray-200 p-3 shadow-lg z-10">
+                <div className="text-sm font-medium mb-2">Selecciona tu talla:</div>
+                <div className="grid grid-cols-4 gap-2">
+                    {product.values.map((value) => (
+                        <button
+                            key={value.size}
+                            disabled={value.stock === 0}
+                            className={`
+                                py-2 text-center rounded text-sm
+                                ${
+                                  value.stock > 0
+                                    ? "border border-gray-100 text-black hover:border-gray-800"
+                                    : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                }
+                                ${selectedSizes.value[id] === value.size.toString() ? "bg-gray-200 border-black" : ""}
+                              `}
+                        >
+                            {value.size}
+                        </button>
+                    ))}
                 </div>
-            ): (
-                <div className="absolute bottom-[0rem] w-full transition-all duration-300">
-                    <button 
-                        className="w-full py-2 text-sm font-light tracking-wider transition-colors duration-200 ease-in-out bg-[#000] text-white" 
-                        onClick={() => handleSelectSize(id)}
-                    >
-                        SELECCIONAR TALLA
-                    </button>
-                </div>
-            )
-        ) : (
-            <div className="absolute inset-0 bg-[#ffffff94] backdrop-blur-sm flex flex-col justify-center items-center p-4 transition-all duration-300 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto">
-                <h3 className="text-sm font-medium mb-3">Seleccionar Talla</h3>
-                <div className="flex justify-center align-center w-full">
-                    <div className="grid grid-cols-3 gap-2 w-full max-w-[200px]">
-                        {product.values.map((size: Size) => (
-                            <button
-                                key={size.size}
-                                onClick={() => {
-                                    if (size.stock > 0) {
-                                        selectedSizes.value = { ...selectedSizes.value, [id]: size.size.toString() }
-                                    }
-                                }}
-                                className={`py-2 px-3 text-xs border ${ size.stock === 0
-                                    ? "border-[#4444443a] text-[#4444443a] cursor-not-allowed"
-                                    : selectedSizes.value[id] === size.size.toString()
-                                    ? "border-black bg-black text-white"
-                                    : "border-gray-300 hover:border-black"
-                                    }
-                                `}
-                            >
-                                {size.size}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-                <button 
-                    onClick={handleAddToCart}
-                    className={`w-full mt-6 py-2 text-sm font-light tracking-wider hover:text-black transition-colors duration-200 ease-in-out ${selectedSizes.value[id] ? "bg-[#000] text-white hover:bg-[#303030] hover:text-white" : "bg-white text-black opacity-30 cursor-not-allowed"}`}
-                >
-                    AÑADIR AL CARRITO
-                </button>
             </div>
-        )
+            )}
+        </div>
     )
 }
