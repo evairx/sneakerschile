@@ -49,6 +49,7 @@ export default function AddToCart({ product, id }: { product: Values; id: number
     function handleAddToCart() {
         if (!selectedSizes.value[id]) return
         addProductToCart(product, selectedSizes.value[id])
+        openSelected.value = { ...openSelected.value, [id]: false }
         selectedSizes.value = {}
         cartOpen.set(true)
     }
@@ -67,33 +68,46 @@ export default function AddToCart({ product, id }: { product: Values; id: number
 
     return (
         <div className="relative" ref={containerRef}>
-            <button onClick={() => handleSelectSize(id)} class="w-full py-2 text-sm font-medium rounded transition-colors duration-200 border border-black text-black hover:bg-black hover:text-white">
-                Seleccionar Talla
+            <button 
+                onClick={() => openSelected.value[id] ? handleAddToCart() : handleSelectSize(id)}
+                disabled={openSelected.value[id] && !selectedSizes.value[id]}
+                className={`w-full py-2 text-sm font-medium rounded transition-colors duration-200
+                    ${openSelected.value[id] && !selectedSizes.value[id]
+                        ? "bg-gray-200 border border-gray-200 text-gray-400 cursor-not-allowed"
+                        : "border border-black text-black hover:bg-black hover:text-white"
+                    }
+                `}
+            >
+                {openSelected.value[id] ? "Añadir al Carrito" : "Seleccionar Talla"}
             </button>
             
             {openSelected.value[id] && (
-            <div className="absolute left-0 right-0 bottom-[40px] bg-white border-t border-gray-200 p-3 shadow-lg z-10">
-                <div className="text-sm font-medium mb-2">Selecciona tu talla:</div>
-                <div className="grid grid-cols-4 gap-2">
-                    {product.values.map((value) => (
-                        <button
-                            key={value.size}
-                            disabled={value.stock === 0}
-                            className={`
-                                py-2 text-center rounded text-sm
-                                ${
-                                  value.stock > 0
-                                    ? "border border-gray-100 text-black hover:border-gray-800"
-                                    : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                }
-                                ${selectedSizes.value[id] === value.size.toString() ? "bg-gray-200 border-black" : ""}
-                              `}
-                        >
-                            {value.size}
-                        </button>
-                    ))}
+                <div className="absolute left-0 right-0 bottom-[40px] bg-white border-t border-gray-200 p-3 shadow-lg z-10">
+                    <div className="text-sm font-medium mb-2">Selecciona tu talla:</div>
+                    <div className="grid grid-cols-4 gap-2">
+                        {[...product.values]
+                            .sort((a, b) => a.size - b.size)
+                            .map((value) => (
+                                <button
+                                    key={value.size}
+                                    disabled={value.stock === 0}
+                                    onClick={() => handleSizeClick(value.size.toString())}
+                                    className={`
+                                        py-2 text-center rounded text-sm
+                                        ${value.stock === 0 
+                                            ? "bg-gray-100 text-gray-400 cursor-not-allowed" 
+                                            : selectedSizes.value[id] === value.size.toString()
+                                                ? "border border-black bg-black text-white" 
+                                                : "border border-gray-100 text-black hover:border-gray-800"
+                                        }
+                                    `}
+                                >
+                                    {value.size}
+                                </button>
+                            ))
+                        }
+                    </div>
                 </div>
-            </div>
             )}
         </div>
     )
