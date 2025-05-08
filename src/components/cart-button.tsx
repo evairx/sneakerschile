@@ -115,7 +115,8 @@ export default function CartButton() {
                                             </span>
                                             <button
                                                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                className="w-8 h-8 flex items-center justify-center border border-gray-300 hover:bg-black hover:text-white transition-colors duration-200 ease-in-out"
+                                                disabled={item.quantity >= 5}
+                                                className={`w-8 h-8 flex items-center justify-center border border-gray-300 ${item.quantity >= 5 ? "opacity-50 cursor-not-allowed" : "hover:bg-black hover:text-white transition-colors duration-200 ease-in-out"}`}
                                             >
                                                 +
                                             </button>

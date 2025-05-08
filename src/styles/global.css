@@ -39,6 +39,7 @@ select {
 
 ::-webkit-scrollbar-thumb {
     background:rgb(0, 0, 0);
+    border-radius: 99999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

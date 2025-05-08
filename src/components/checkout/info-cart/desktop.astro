@@ -1,0 +1,37 @@
+---
+import ItemsCart from './items-cart';
+import Subtotal from './subtotal';
+import TaxValue from './tax-value';
+import ShippingPrice from './shipping-price';
+import TotalValue from './total-value';
+---
+
+<div class="hidden md:block md:col-span-2">
+    <div class="bg-gray-50 p-6 sticky top-24">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-light">Resumen del pedido</h2>
+            <span class="text-sm font-medium">#ORD-QIMJF</span>
+        </div>
+
+        <ItemsCart client:only />
+
+        <div class="space-y-2 py-4 border-t border-gray-200">
+            <div class="flex justify-between text-sm">
+                <span>Subtotal</span>
+                <span class="font-light text-gray-600">$<Subtotal client:load/></span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span>Impuestos</span>
+                <span class="font-light text-gray-600">$<TaxValue client:load/></span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span>Envío</span>
+                <span class="font-light text-gray-600">$<ShippingPrice client:load /></span>
+            </div>
+            <div class="flex justify-between font-medium pt-2 border-t border-gray-200 mt-2">
+                <span>Total</span>
+                <span>$<TotalValue client:load/></span>
+            </div>
+        </div>
+    </div>
+</div>

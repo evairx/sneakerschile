@@ -7,6 +7,7 @@ import SelectCities from '@/components/checkout/delivery/select-cities';
 import SelectShipping from "@/components/checkout/delivery/select-shipping";
 import SelectPayment from "@/components/checkout/select-payment";
 import PayButton from '@/components/checkout/paybutton';
+import InfoCartDesktop from '@/components/checkout/info-cart/desktop.astro';
 import { nanoid } from 'nanoid';
 ---
 
@@ -136,6 +137,7 @@ import { nanoid } from 'nanoid';
                     </div>
                     <PayButton client:load />
                 </div>
+                <InfoCartDesktop />
             </div>
         </div>
     </section>
@@ -160,23 +162,4 @@ import { nanoid } from 'nanoid';
             sessionStorage.setItem("form", JSON.stringify(formData));
         });
     });
-</script>
-
-<script>
-    try {
-        const cartCookie = document.cookie.split('; ').find(row => row.startsWith('cart='));
-        if (cartCookie) {
-            const encodedCart = cartCookie.split('=')[1];
-            const decodedCart = decodeURIComponent(encodedCart);
-            const cart = JSON.parse(decodedCart);
-
-            if (!cart.items || cart.items.length === 0) {
-                window.location.href = '/';
-            }
-        } else {
-            window.location.href = '/';
-        }
-    } catch (error) {
-        window.location.href = '/';
-    }
 </script>

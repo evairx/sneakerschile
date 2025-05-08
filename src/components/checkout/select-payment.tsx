@@ -8,7 +8,7 @@ export default function SelectPayment() {
     const shippingValue = useStore(priceShipping)
 
     const setPaymentMethod = (method: any) => {
-        selectedPayment.set(method.name)
+        selectedPayment.set(method.id)
         const total = subtotalValue+shippingValue
 
         if (method?.fee) {
@@ -30,13 +30,13 @@ export default function SelectPayment() {
                 {paymentMethods.map((method) => (
                     <div 
                         key={method.id} 
-                        className={`border p-4 cursor-pointer transition-colors ${method.name === payment ? "border-gray-900" : "border-gray-300 hover:border-gray-400"}`}
+                        className={`border p-4 cursor-pointer transition-colors ${method.id === payment ? "border-gray-900" : "border-gray-300 hover:border-gray-400"}`}
                         onClick={() => setPaymentMethod(method)}
                     >
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
                                 <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${method.name === payment ? "border-black" : "border-gray-500"}`}>
-                                    {method.name === payment && <div className="w-3 h-3 bg-black rounded-full"></div>}
+                                    {method.id === payment && <div className="w-3 h-3 bg-black rounded-full"></div>}
                                 </div>
                                 <div className="flex items-center">
                                     <span className="font-light">{method.label}</span>
@@ -48,12 +48,12 @@ export default function SelectPayment() {
                             ))}
                             </div>
                         </div>
-                        {method.name === payment && (method.name === "WebPay" || method.name === "Mach") && (
+                        {method.id === payment && (method.name === "webpay" || method.name === "mach") && (
                             <div className="mt-2 text-sm">
                                 <p className="text-sm font-light text-gray-500">Pago Procesado Por Flow</p>
                             </div>
                         )}
-                        {method.name === payment && method.name === "Transfer" && <div className="mt-2 text-sm">
+                        {method.id === payment && method.name === "transfer" && <div className="mt-2 text-sm">
                             <div className="mt-4 p-4 bg-gray-50 border border-gray-200">
                                 <div className="mb-3 pb-3 border-b border-gray-200">
                                     <p className="font-medium text-red-600">IMPORTANTE:</p>

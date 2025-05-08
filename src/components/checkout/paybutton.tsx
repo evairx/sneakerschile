@@ -1,10 +1,9 @@
 import { useEffect, useCallback } from "preact/hooks"
-import { subtotal, priceShipping, selectedShipping, selectedPayment, tax } from "@/stores/checkout"
+import { selectedShipping, selectedPayment, tax } from "@/stores/checkout"
 import { useStore } from "@nanostores/preact"
 import { signal } from "@preact/signals"
 import { useQuery } from "@/hook/use-query"
 import TotalValue from "@/components/checkout/info-cart/total-value"
-import { actions } from "astro:actions"
 
 interface CartItem {
     id: string;
@@ -72,11 +71,8 @@ const getCartFromCookies = () => {
 }
 
 export default function PayButtonMobile() {
-    const subtotalValue = useStore(subtotal)
-    const shippingValue = useStore(priceShipping)
     const selectedShippingValue = useStore(selectedShipping)
     const selectedPaymentValue = useStore(selectedPayment)
-    const taxValue = useStore(tax)
     const isButtonVisible = useScrollVisibility()
     const isMobile = useQuery('(min-width: 768px)');
     
@@ -89,21 +85,46 @@ export default function PayButtonMobile() {
         if (!isButtonEnabled) return;
                     
         loading.value = true;
-        const cartData = getCartFromCookies()
-
-        const simplifiedItems: SimplifiedCartItem[] = cartData.items.map((item: CartItem) => ({
-            id: item.productId,
-            quantity: item.quantity
-        }))
-
-        const formattedCart = {
-            items: simplifiedItems,
-            shipping: selectedShippingValue.id,
-            payment: selectedPaymentValue
-        }
+        const cartData = getCartFromCookies();
     
-        console.log('cart:', formattedCart);
-    }
+        try {
+            const simplifiedItems = cartData.items.map((item: CartItem) => ({
+                id: item.productId,
+                quantity: item.quantity,
+                size: item.size
+            }));
+    
+            const formattedCart = {
+                idOrder: "QIMJX",
+                name: "Juan Perez",
+                email: "akongamer14@gmail.com",
+                address: "Av. Los Pajaritos 3425, Depto 501, Maipú, Santiago",
+                items: simplifiedItems,
+                shipping: selectedShippingValue.id,
+                payment: selectedPaymentValue
+            };
+    
+            const response = await fetch('/api/v1/pay', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formattedCart)
+            });
+    
+            const result = await response.json();
+    
+            if (result.success && result.data && result.data.url) {
+                window.location.href = result.data.url;
+            } else {
+                console.error('Error en el procesamiento del pago:', result);
+                loading.value = false;
+            }
+        } catch (error) {
+            console.error('Error al enviar la solicitud de pago:', error);
+            loading.value = false;
+        }
+    };
     
     return (
         isMobile ? (

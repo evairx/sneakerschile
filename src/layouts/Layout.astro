@@ -29,4 +29,13 @@ import '@/styles/global.css'
 			<slot/>
 		</main>
 	</body>
+	<script is:inline>
+		import('https://cdn.jsdelivr.net/npm/@thumbmarkjs/thumbmarkjs/dist/thumbmark.umd.js').then(() => {
+			if (!document.cookie.includes('session=')) {
+				ThumbmarkJS.getFingerprint().then(fp => {
+					document.cookie = `session=${fp}; path=/; Secure; SameSite=Strict`;
+				});
+			}
+		});
+	</script>
 </html>

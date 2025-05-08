@@ -24,6 +24,7 @@ const selectorStates = new Map<string, {
   isOpen: Signal<boolean>
   selectedItem: Signal<SelectorItem | null>
   hoveredItemId: Signal<string | null>
+  searchQuery: Signal<string>
 }>()
 
 function getOrCreateState(instanceId: string) {
@@ -31,7 +32,8 @@ function getOrCreateState(instanceId: string) {
     selectorStates.set(instanceId, {
       isOpen: signal(false),
       selectedItem: signal<SelectorItem | null>(null),
-      hoveredItemId: signal<string | null>(null)
+      hoveredItemId: signal<string | null>(null),
+      searchQuery: signal<string>("")
     })
   }
   return selectorStates.get(instanceId)!
@@ -78,6 +80,22 @@ export default function Selector({ items, onChange, placeholder = "Seleccionar",
     }
   }
 
+  const filteredItems = items.filter(item => {
+    if (!state.searchQuery.value) return true;
+
+    const searchLower = state.searchQuery.value.toLowerCase();
+    const regionMatch = (item.region || "").toLowerCase().includes(searchLower);
+    const nameMatch = (item.name || "").toLowerCase().includes(searchLower);
+    const numberMatch = (item.number || "").toString().toLowerCase().includes(searchLower);
+
+    return regionMatch || nameMatch || numberMatch;
+  });
+
+  const handleSearchChange = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    state.searchQuery.value = target.value;
+  };
+
   return (
     <div className={classNames("relative w-full", className || "")} ref={dropdownRef} onKeyDown={handleKeyDown}>
       <button
@@ -122,10 +140,22 @@ export default function Selector({ items, onChange, placeholder = "Seleccionar",
             animation: "dropdownFadeIn 150ms ease-out forwards",
           }}
         >
-          <div className="w-full rounded-sm border border-gray-300 bg-white p-1 shadow-lg max-h-60 overflow-y-auto">
-            {items.length > 0 ? (
-              <div className="py-1">
-                {items.map((item) => (
+          <div className="w-full rounded-sm border border-gray-300 bg-white shadow-lg">
+            {/* Search input */}
+            <div className="px-3 py-2 border-b border-gray-200 bg-white">
+              <input 
+                type="text" 
+                className="w-full px-3 py-2 border border-gray-500 focus:outline-none focus:border-black"
+                placeholder="Buscar..." 
+                value={state.searchQuery.value}
+                onInput={handleSearchChange}
+              />
+            </div>
+
+            {/* Scrollable items */}
+            <div className="max-h-60 overflow-y-auto py-1">
+              {filteredItems.length > 0 ? (
+                filteredItems.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => handleSelectItem(item)}
@@ -144,11 +174,11 @@ export default function Selector({ items, onChange, placeholder = "Seleccionar",
                     <span className="font-medium">{item.region || item.name}</span>
                     <span className="font-light">{item.number}</span>
                   </button>
-                ))}
-              </div>
-            ) : (
-              <div className="py-2 px-3 text-sm text-gray-500">No hay opciones disponibles</div>
-            )}
+                ))
+              ) : (
+                <div className="py-2 px-3 text-sm text-gray-500">No hay opciones disponibles</div>
+              )}
+            </div>
           </div>
         </div>
       )}

@@ -131,6 +131,7 @@ export async function getRegions() {
                 cities: cities.filter(c => c.region_id === region.id).map(c => ({
                     id: c.id,
                     name: c.name,
+                    adaptive: Boolean(c.adaptive),
                 }))
             }))
         };

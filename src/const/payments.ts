@@ -1,11 +1,13 @@
 export const paymentMethods = [
     {
         id: "1",
-        name: "Webpay",
-        label: "WebPay",
+        name: "webpay",
+        label: "Webpay",
         images: [
             'https://assets-prod.evairx.me/visa.svg',
-            'https://assets-prod.evairx.me/mastercard.svg'
+            'https://assets-prod.evairx.me/mastercard.svg',
+            'https://assets-prod.evairx.me/american_express.svg',
+            'https://assets-prod.evairx.me/diners_club.svg',
         ],
         fee: {
             iva: 0.19,
@@ -14,7 +16,7 @@ export const paymentMethods = [
     },
     {
         id: "3",
-        name: "Transfer",
+        name: "transfer",
         label: "Transferencia Bancaria",
     }
 ]

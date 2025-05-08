@@ -12,6 +12,7 @@ export default function SelectCities() {
 
     const handleClick = async (item: City) => {
         selectedCity.set(item)
+        console.log('item', item)
         
         if(region.id === 'WL8aV2_SKIeh9lYO2wi4x') {
             async function getDistanceData() {

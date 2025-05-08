@@ -1,7 +1,7 @@
 ---
 import { getProducts } from "@/db/client";
 import { formatPrice } from "@/utils/formatHelper";
-import { Picture } from "astro:assets";
+import { Image } from "astro:assets";
 import AddToCart from "@/components/add-to-cart";
 
 const res = await getProducts();
@@ -19,24 +19,28 @@ const products: any[] = 'data' in res ? res.data : [];
         </p>
     </div>
 ): (
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-        {products.map((product) => (
-            <div class="group">
-                 <div class="relative overflow-hidden mb-4">
-                    <Picture
-                        src={product.image || "/placeholder.svg"}
-                        alt={product.name}
-                        formats={['webp']}
-                        width={400}
-                        height={400}
-                        class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <AddToCart product={product} id={product.id} client:only />
-                 </div>
-                 <h3 class="text-sm font-light">{product.name}</h3>
-                 <p class="text-sm font-medium mt-1">${formatPrice(product.price)}</p>
-            </div>
-        ))}
+    <div class="max-w-7xl mx-auto px-3 py-4 sm:px-4 sm:py-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            {products.map((product) => (
+                <div class="relative bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-black transition-all duration-300 hover:shadow-md">
+                    <div class="relative aspect-square overflow-hidden">
+                        <img
+                            src={product.image || "/placeholder.svg"}
+                            alt={product.name}
+                            class="object-cover transition-transform duration-300 hover:scale-105"
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                        />
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-light text-sm sm:text-base truncate">{product.name}</h3>
+                        <p class="font-bold text-sm sm:text-base mt-1 mb-2">${formatPrice(product.price)}</p>
+                        <button class="w-full py-2 text-sm font-medium rounded transition-colors duration-200 border border-black text-black hover:bg-black hover:text-white">
+                            Seleccionar Talla
+                        </button>
+                    </div>
+                </div>
+            ))}
+        </div>
     </div>
 )}
 </div>
