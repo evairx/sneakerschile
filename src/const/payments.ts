@@ -7,7 +7,6 @@ export const paymentMethods = [
             'https://assets-prod.evairx.me/visa.svg',
             'https://assets-prod.evairx.me/mastercard.svg',
             'https://assets-prod.evairx.me/american_express.svg',
-            'https://assets-prod.evairx.me/diners_club.svg',
         ],
         fee: {
             iva: 0.19,

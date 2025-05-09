@@ -6,11 +6,32 @@ import { CartIcon, CloseIcon } from "@/components/icons"
 import { useCart } from "@/hook/use-cart"
 import { formatPrice } from "sneakerschile-utils/format"
 
+declare global {
+    interface Window {
+        ThumbmarkJS: {
+            getFingerprint(): Promise<string>;
+        }
+    }
+}
+
 export default function CartButton() {
     const isCartOpen = useStore(cartOpen)
     const cartValue = useStore(cart)
     const cartSubtotal = useStore(subtotal)
     const { updateQuantity, removeFromCart } = useCart()
+
+    useEffect(() => {
+        if (!document.cookie.includes('session=')) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@thumbmarkjs/thumbmarkjs/dist/thumbmark.umd.js';
+            script.onload = () => {
+                window.ThumbmarkJS.getFingerprint().then(fp => {
+                    document.cookie = `session=${fp}; path=/; Secure; SameSite=Strict`;
+                });
+            };
+            document.head.appendChild(script);
+        }
+    }, []);
 
     const toggleCart = () => {
         cartOpen.set(!isCartOpen)

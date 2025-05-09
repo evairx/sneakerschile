@@ -44,7 +44,7 @@ export default function SelectPayment() {
                             </div>
                             <div className="flex items-center space-x-2">
                             {method.images?.map((src, index) => (
-                                <img key={index} src={src} alt={`payment-${index}`} className="h-6" />
+                                <img key={index} src={src} alt={`payment-${index}`} className="h-6 rounded-lg" />
                             ))}
                             </div>
                         </div>

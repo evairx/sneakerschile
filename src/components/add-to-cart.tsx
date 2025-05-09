@@ -68,22 +68,24 @@ export default function AddToCart({ product, id }: { product: Values; id: number
 
     return (
         <div className="relative" ref={containerRef}>
-            <button 
-                onClick={() => openSelected.value[id] ? handleAddToCart() : handleSelectSize(id)}
-                disabled={openSelected.value[id] && !selectedSizes.value[id]}
-                className={`w-full py-2 text-sm font-medium rounded transition-colors duration-200
-                    ${openSelected.value[id] && !selectedSizes.value[id]
-                        ? "bg-gray-200 border border-gray-200 text-gray-400 cursor-not-allowed"
-                        : "border border-black text-black hover:bg-black hover:text-white"
-                    }
-                `}
-            >
-                {openSelected.value[id] ? "Añadir al Carrito" : "Seleccionar Talla"}
-            </button>
-            
-            {openSelected.value[id] && (
-                <div className="absolute left-0 right-0 bottom-[40px] bg-white border-t border-gray-200 p-3 shadow-lg z-10">
-                    <div className="text-sm font-medium mb-2">Selecciona tu talla:</div>
+            {openSelected.value[id] && <div className="absolute bottom-[100px] left-0 backdrop-blur-sm h-[35dvh] w-full p-3 z-8"></div>}
+            <div className="pb-3 pt-3 px-3">
+                <button 
+                    onClick={() => openSelected.value[id] ? handleAddToCart() : handleSelectSize(id)}
+                    disabled={openSelected.value[id] && !selectedSizes.value[id]}
+                    className={`w-full py-2 text-sm font-medium rounded transition-colors duration-200
+                        ${openSelected.value[id] && !selectedSizes.value[id]
+                            ? "bg-gray-200 border border-gray-200 text-gray-400 cursor-not-allowed"
+                            : "border border-black text-black hover:bg-black hover:text-white"
+                        }
+                    `}
+                >
+                    {openSelected.value[id] ? "Añadir al Carrito" : "Seleccionar Talla"}
+                </button>
+            </div>
+        
+            <div className={`absolute left-0 right-0 bottom-[55px] bg-white border-t border-gray-200 p-3 z-10 transform transition-all duration-300 ease-out ${openSelected.value[id] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"}`}>
+                <div className="text-sm font-medium mb-2">Selecciona tu talla:</div>
                     <div className="grid grid-cols-4 gap-2">
                         {[...product.values]
                             .sort((a, b) => a.size - b.size)
@@ -108,7 +110,6 @@ export default function AddToCart({ product, id }: { product: Values; id: number
                         }
                     </div>
                 </div>
-            )}
         </div>
     )
 }

@@ -14,12 +14,20 @@ export function useCart() {
     price: number,
     category: string,
     image: string,
-    values: { size: number, stock: number }[]
+    values: { size: number, stock: number }[],
+    discount_price: number,
   }, size: string) => {
     const current = cart.get()
     const itemIndex = current.items.findIndex(
       (item: any) => item.productId === product.id && item.size === size
     )
+
+    // Determinar el precio a usar
+    const finalPrice = (product.discount_price && 
+                       product.discount_price !== 0 && 
+                       product.discount_price !== product.price) 
+                       ? product.discount_price 
+                       : product.price
 
     let updatedItems
 
@@ -38,7 +46,7 @@ export function useCart() {
         id: nanoid(),
         productId: product.id,
         name: product.name,
-        price: product.price,
+        price: finalPrice,
         image: product.image,
         quantity: 1,
         size: size,
